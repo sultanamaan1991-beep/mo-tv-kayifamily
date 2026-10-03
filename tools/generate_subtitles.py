@@ -1,24 +1,30 @@
 #!/usr/bin/env python3
-"""Generate English subtitles from official broadcaster YouTube episodes.
+"""Generate English subtitles from official broadcaster episodes.
 
 Workflow:
-  1. Download episode audio from the official YouTube video (yt-dlp)
+  1. Get episode audio (local file via --input, or YouTube download)
   2. Transcribe Turkish -> English using Faster-Whisper (translate task)
   3. Post-process: clean up formatting, enforce subtitle quality rules
   4. Save as .srt in subtitles/<show>/s<season>e<episode>.en.srt
 
 Usage:
+  # From local authorized file (recommended):
+  python3 tools/generate_subtitles.py --input /path/to/episode.mp4 \\
+      --show mehmed --season 1 --episode 1
+
+  # From YouTube (requires network access to YouTube):
   python3 tools/generate_subtitles.py --show mehmed --season 1 --episode 1
 
 Requirements:
   - faster-whisper (pip install faster-whisper)
-  - yt-dlp (for audio download)
+  - yt-dlp (for YouTube audio download, optional if using --input)
   - ffmpeg (for audio conversion)
   - GPU recommended: 2.5h episode takes ~30-60 min on GPU, 8-15 hours on CPU
 
 IMPORTANT:
   - Generate subtitles from the SAME official video that Kodi will play.
-    This guarantees timing matches.
+    This eliminates source-edit offset, but Whisper timestamps can still
+    drift. ALWAYS test sync at: beginning, 30min, 60min, 90min, near end.
   - Generate ONCE, store the .srt as a reusable asset.
   - Do NOT generate from Kayi's version and assume it syncs to YouTube.
 
@@ -192,7 +198,7 @@ def fmt_time(seconds):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate English SRT from official YouTube episode")
+        description="Generate English SRT from official episode audio")
     parser.add_argument("--show", required=True,
                         choices=["mehmed", "orhan", "salahuddin"])
     parser.add_argument("--season", type=int, required=True)
@@ -201,45 +207,61 @@ def main():
                         choices=list(MODELS.keys()))
     parser.add_argument("--sample-seconds", type=int, default=None,
                         help="Only process first N seconds (for testing)")
+    parser.add_argument("--input", type=str, default=None,
+                        help="Path to authorized local audio/video file. "
+                             "If provided, skips YouTube download. "
+                             "Use this for subtitle generation from a local file.")
     args = parser.parse_args()
 
-    video_id = get_video_id(args.show, args.episode)
-    if not video_id:
-        print(f"ERROR: No YouTube mapping for {args.show} "
-              f"S{args.season}E{args.episode}")
-        sys.exit(1)
-
     print(f"Show: {args.show}, S{args.season}E{args.episode}")
-    print(f"YouTube ID: {video_id}")
     print(f"Model: {args.model}")
 
     # Paths
     work_dir = "/tmp/subtitle_work"
     os.makedirs(work_dir, exist_ok=True)
-    audio_path = os.path.join(
-        work_dir, f"{args.show}_s{args.season}e{args.episode}.mp3")
     srt_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "..",
         "subtitles", args.show,
         f"s{args.season:02d}e{args.episode:02d}.en.srt")
 
-    # Step 1: Download audio
-    if not os.path.exists(audio_path):
-        print("Downloading audio from official YouTube video...")
-        if not download_audio(video_id, audio_path, args.sample_seconds):
-            print("ERROR: Audio download failed. YouTube may be blocking "
-                  "this network. Try from a different network or manually "
-                  "provide the audio file at: " + audio_path)
+    # Step 1: Get audio (local file or YouTube download)
+    if args.input:
+        # Use authorized local file directly
+        if not os.path.exists(args.input):
+            print(f"ERROR: Input file not found: {args.input}")
             sys.exit(1)
+        audio_path = args.input
+        print(f"Using local input file: {audio_path}")
+        print("NOTE: Ensure this file is from the SAME official video "
+              "that Kodi will play, for sync accuracy.")
     else:
-        print(f"Using existing audio: {audio_path}")
+        # Download from YouTube (requires network access to YouTube)
+        video_id = get_video_id(args.show, args.episode)
+        if not video_id:
+            print(f"ERROR: No YouTube mapping for {args.show} "
+                  f"S{args.season}E{args.episode}")
+            sys.exit(1)
+        print(f"YouTube ID: {video_id}")
+        audio_path = os.path.join(
+            work_dir, f"{args.show}_s{args.season}e{args.episode}.mp3")
+        if not os.path.exists(audio_path):
+            print("Downloading audio from official YouTube video...")
+            if not download_audio(video_id, audio_path, args.sample_seconds):
+                print("ERROR: Audio download failed. YouTube may be blocking "
+                      "this network. Try from a different network, or use "
+                      "--input with a local authorized file.")
+                sys.exit(1)
+        else:
+            print(f"Using existing audio: {audio_path}")
 
     # Step 2: Transcribe
     count = transcribe_to_srt(audio_path, srt_path, args.model)
 
     print(f"\nDone! {count} subtitles written to:")
     print(f"  {srt_path}")
-    print("\nReview the SRT for quality before marking as verified.")
+    print("\nIMPORTANT: Test sync at beginning, 30min, 60min, 90min, and near end.")
+    print("Whisper timestamps may drift; do not assume perfect sync.")
+    print("Review the SRT for quality before marking as verified.")
 
 
 if __name__ == "__main__":
