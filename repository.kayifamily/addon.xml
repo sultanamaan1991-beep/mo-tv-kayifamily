@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.kayifamily"
+       version="1.0.0"
+       name="KayiFamily Repository"
+       provider-name="KayiFamily TV">
+    <extension point="xbmc.addon.repository" name="KayiFamily Repository">
+        <info compressed="false">https://sultanamaan1991-beep.github.io/mo-tv-kayifamily/addons.xml</info>
+        <checksum>https://sultanamaan1991-beep.github.io/mo-tv-kayifamily/addons.xml.md5</checksum>
+        <datadir zip="true">https://sultanamaan1991-beep.github.io/mo-tv-kayifamily/</datadir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">KayiFamily TV add-on repository</summary>
+        <description lang="en_GB">Official repository for the KayiFamily TV Kodi add-on. Install KayiFamily TV from here to receive updates.</description>
+        <platform>all</platform>
+        <license>MIT</license>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon>
