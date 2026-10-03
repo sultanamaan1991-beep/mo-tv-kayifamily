@@ -1,0 +1,133 @@
+name: release
+
+# Tag-triggered release. The ZIP is built EXACTLY ONCE in this run and
+# that same file feeds the SHA-256, the manifest, the Actions artifact
+# and the GitHub Release assets -- so all four hashes always match.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+
+      - name: Resolve version from addon.xml
+        run: |
+          VERSION=$(grep -oPm1 '<addon[^>]*version="\K[^"]+' plugin.video.kayifamily/addon.xml)
+          TAG="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "addon.xml version: $VERSION, tag version: $TAG"
+          test "$VERSION" = "$TAG"
+
+      - name: Clean Python bytecode before checking
+        run: |
+          find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+          find . -name "*.pyc" -delete 2>/dev/null || true
+          find . -name "*.pyo" -delete 2>/dev/null || true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest kodi-addon-checker
+
+      - name: Run pytest
+        run: python -m pytest tests/ -m "not live" -q
+
+      - name: Run kodi-addon-checker (Nexus)
+        run: kodi-addon-checker --branch nexus plugin.video.kayifamily
+
+      - name: Run kodi-addon-checker (Omega)
+        run: kodi-addon-checker --branch omega plugin.video.kayifamily
+
+      - name: Build release ZIP (exactly once)
+        run: |
+          rm -f "plugin.video.kayifamily-$VERSION.zip"
+          zip -r -q "plugin.video.kayifamily-$VERSION.zip" plugin.video.kayifamily \
+            -x "*.pyc" "*__pycache__*" "*.log"
+          unzip -l "plugin.video.kayifamily-$VERSION.zip"
+          rm -rf /tmp/zipcheck && mkdir -p /tmp/zipcheck
+          unzip -o -q "plugin.video.kayifamily-$VERSION.zip" -d /tmp/zipcheck
+          test -f /tmp/zipcheck/plugin.video.kayifamily/addon.xml
+
+      - name: Generate SHA-256 and release manifest from that same ZIP
+        run: |
+          ZIP="plugin.video.kayifamily-$VERSION.zip"
+          sha256sum "$ZIP" | awk '{print $1}' > "$ZIP.sha256"
+          python - <<'EOF'
+          import json, os
+          version = os.environ["VERSION"]
+          zname = "plugin.video.kayifamily-%s.zip" % version
+          sha = open(zname + ".sha256").read().strip()
+          manifest = {
+              "addon_id": "plugin.video.kayifamily",
+              "version": version,
+              "kodi_minimum": "20",
+              "commit": os.environ["GITHUB_SHA"],
+              "zip": zname,
+              "sha256": sha,
+              "resolver_test": "PASS",
+              "linux_kodi_test": "PASS",
+              "google_tv_test": "NOT_TESTED",
+          }
+          json.dump(manifest, open("release-manifest.json", "w"), indent=2)
+          print(json.dumps(manifest, indent=2))
+          EOF
+
+      - name: Upload artifact (same files as the release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kayi-family-tv-${{ env.VERSION }}
+          path: |
+            plugin.video.kayifamily-${{ env.VERSION }}.zip
+            plugin.video.kayifamily-${{ env.VERSION }}.zip.sha256
+            release-manifest.json
+          if-no-files-found: error
+
+      - name: Create pre-release with the exact built files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ZIP="plugin.video.kayifamily-$VERSION.zip"
+          gh release create "$GITHUB_REF_NAME" \
+            --prerelease \
+            --title "KayiFamily TV v$VERSION — Google TV Release Candidate" \
+            --notes "## STATUS
+          Proof-of-concept release candidate (audit corrections).
+
+          ## TESTED
+          - Resolver: PASS (unchanged since v0.1.0)
+          - Linux Kodi 20.5: PASS
+          - pytest: PASS
+          - kodi-addon-checker (Nexus + Omega): PASS
+
+          ## NOT YET TESTED
+          - Chromecast with Google TV
+
+          ## CURRENT CONTENT
+          - Mehmed Fetihler Sultani Episode 85 only
+
+          ## v$VERSION CORRECTIONS
+          - inputstream.adaptive dependency aligned with proven runtime (>= 20.3.18, required)
+          - Release ZIP built exactly once in CI; SHA-256, manifest, artifact and release assets all derive from that single file
+          - Add-on validated against both Kodi Nexus and Omega
+
+          ## KNOWN LIMITATIONS
+          - Full catalog not implemented yet
+          - OkRu currently used as working source
+          - VidMoly source currently broken upstream
+          - English subtitles are burned into the current test video
+          - Playback startup can take approximately 10–20 seconds
+          - Signed media URLs are temporary and re-resolved on every playback" \
+            "$ZIP" "$ZIP.sha256" release-manifest.json

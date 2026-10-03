@@ -1,9 +1,11 @@
 name: build-kodi-addon
 
+# Continuous validation for main/PRs. Release packaging happens in
+# release.yml (tag builds) so a release ZIP is always produced exactly
+# once per release, in a single workflow run.
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -14,6 +16,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+
+      - name: Clean Python bytecode before checking
+        run: |
+          find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+          find . -name "*.pyc" -delete 2>/dev/null || true
+          find . -name "*.pyo" -delete 2>/dev/null || true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,47 +36,20 @@ jobs:
       - name: Run pytest
         run: python -m pytest tests/ -m "not live" -q
 
-      - name: Run kodi-addon-checker
+      - name: Run kodi-addon-checker (Nexus)
+        run: kodi-addon-checker --branch nexus plugin.video.kayifamily
+
+      - name: Run kodi-addon-checker (Omega)
         run: kodi-addon-checker --branch omega plugin.video.kayifamily
 
-      - name: Package release ZIP
+      - name: Package release ZIP (validation only, not published)
         run: |
-          rm -f plugin.video.kayifamily-0.1.0.zip
-          zip -r plugin.video.kayifamily-0.1.0.zip plugin.video.kayifamily \
+          VERSION=$(grep -oPm1 '<addon[^>]*version="\K[^"]+' plugin.video.kayifamily/addon.xml)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          rm -f "plugin.video.kayifamily-$VERSION.zip"
+          zip -r -q "plugin.video.kayifamily-$VERSION.zip" plugin.video.kayifamily \
             -x "*.pyc" "*__pycache__*" "*.log"
-          unzip -l plugin.video.kayifamily-0.1.0.zip
-          test -f plugin.video.kayifamily/addon.xml || \
-            (unzip -o -q plugin.video.kayifamily-0.1.0.zip -d /tmp/zipcheck && \
-             test -f /tmp/zipcheck/plugin.video.kayifamily/addon.xml)
-
-      - name: Generate SHA-256 and release manifest
-        run: |
-          sha256sum plugin.video.kayifamily-0.1.0.zip | awk '{print $1}' \
-            > plugin.video.kayifamily-0.1.0.sha256
-          python - <<'EOF'
-          import hashlib, json
-          sha = open("plugin.video.kayifamily-0.1.0.sha256").read().strip()
-          manifest = {
-              "addon_id": "plugin.video.kayifamily",
-              "version": "0.1.0",
-              "kodi_minimum": "20",
-              "commit": "${{ github.sha }}",
-              "zip": "plugin.video.kayifamily-0.1.0.zip",
-              "sha256": sha,
-              "resolver_test": "PASS",
-              "linux_kodi_test": "PASS",
-              "google_tv_test": "NOT_TESTED",
-          }
-          json.dump(manifest, open("release-manifest.json", "w"), indent=2)
-          print(json.dumps(manifest, indent=2))
-          EOF
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: kayi-family-tv-0.1.0
-          path: |
-            plugin.video.kayifamily-0.1.0.zip
-            plugin.video.kayifamily-0.1.0.sha256
-            release-manifest.json
-          if-no-files-found: error
+          unzip -l "plugin.video.kayifamily-$VERSION.zip"
+          rm -rf /tmp/zipcheck && mkdir -p /tmp/zipcheck
+          unzip -o -q "plugin.video.kayifamily-$VERSION.zip" -d /tmp/zipcheck
+          test -f /tmp/zipcheck/plugin.video.kayifamily/addon.xml
