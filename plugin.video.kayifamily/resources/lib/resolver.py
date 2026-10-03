@@ -17,7 +17,15 @@ The dict always has this shape:
 How it works (verified 2026-10-02 against
 https://kayifamilytv.com/mehmed-fetihler-sultani-episode-85/):
 
-1. Episode page -> player tabs are plain <iframe> embeds, e.g.
+1. Episode page -> the episode's WordPress post ID (postid-NNN in the
+   page) -> post content via the WP REST API. Player iframes are taken
+   ONLY from the episode's own post content, never from the full page
+   HTML: the page template injects "latest videos" player widgets that
+   belong to OTHER episodes, and scanning them caused different episodes
+   to resolve to the same video (issue #3). Identity is validated by
+   matching the API post's canonical link against the final page URL;
+   any mismatch fails closed.
+2. The episode's own player tabs are plain <iframe> embeds, e.g.
      https://vidmoly.org/embed-<id>.html        ("moLy" tab)
      https://ok.ru/videoembed/<id>?nochat=1     ("OkRu" tab)
 2. The OK.ru embed page carries a flashVars JSON blob with signed,
@@ -120,15 +128,62 @@ _IFRAME_RE = re.compile(
 _OKRU_RE = re.compile(r"(?:https?:)?//ok\.ru/videoembed/(\d+)", re.IGNORECASE)
 _MOLY_RE = re.compile(r"https?://vidmoly\.org/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
 
+# WordPress REST API for canonical post data. Player iframes are taken
+# ONLY from the episode's own post content (content.rendered) -- never
+# from the full page HTML, which also contains template-injected
+# "latest videos" player widgets belonging to OTHER episodes.
+WP_API = SITE_BASE + "/wp-json/wp/v2"
+
+_POSTID_RE = re.compile(r"postid-(\d+)", re.IGNORECASE)
+
+
+def _get_post_content(session, episode_url, final_url, html):
+    """Return the episode's own post content via the WordPress API.
+
+    Identity validation: the API post's canonical link must match the
+    final page URL. Any mismatch fails closed -- we never want to play
+    a video belonging to a different episode.
+    """
+    m = _POSTID_RE.search(html)
+    if not m:
+        raise ResolverError(
+            "Could not identify the episode on the page (no post ID).")
+    post_id = m.group(1)
+    debug("Episode post ID: %s" % post_id)
+
+    api_url = "%s/posts/%s" % (WP_API, post_id)
+    _, body = session.get_text(api_url, referer=SITE_BASE + "/")
+    try:
+        import json
+        post = json.loads(body)
+    except ValueError:
+        raise ResolverError("Could not read episode data (post %s)." % post_id)
+
+    canonical = (post.get("link") or "").rstrip("/")
+    if canonical and canonical != final_url.rstrip("/"):
+        raise ResolverError(
+            "Episode identity mismatch: page %s does not match post %s."
+            % (final_url, canonical))
+    debug("Episode identity confirmed: %s" % canonical)
+    return post.get("content", {}).get("rendered", "")
+
 
 def find_player_sources(episode_url):
-    """Return [(label, iframe_url), ...] for the episode page's player tabs."""
+    """Return [(label, iframe_url), ...] for the episode's OWN player.
+
+    Only <iframe> embeds inside the episode's WordPress post content are
+    considered. Template-injected widgets (e.g. "latest videos" players
+    for other episodes) are ignored, so Episode N can never resolve to
+    Episode M's video.
+    """
     session = _Session()
     final_url, html = session.get_text(episode_url)
     log("Episode page loaded: %s (HTTP 200)" % final_url)
 
+    content = _get_post_content(session, episode_url, final_url, html)
+
     sources = []
-    for match in _IFRAME_RE.finditer(html):
+    for match in _IFRAME_RE.finditer(content):
         src = match.group(1).strip()
         if _OKRU_RE.search(src):
             if src.startswith("//"):
@@ -136,10 +191,10 @@ def find_player_sources(episode_url):
             # strip the nochat query; the canonical embed URL is enough
             src = src.split("?")[0]
             sources.append(("okru", src))
-            debug("iframe domain: ok.ru -> %s" % src)
+            debug("episode player iframe: ok.ru -> %s" % src)
         elif _MOLY_RE.search(src):
             sources.append(("moly", src))
-            debug("iframe domain: vidmoly.org -> %s" % src)
+            debug("episode player iframe: vidmoly.org -> %s" % src)
 
     # de-duplicate, keep page order
     seen, unique = set(), []
@@ -147,6 +202,8 @@ def find_player_sources(episode_url):
         if (label, src) not in seen:
             seen.add((label, src))
             unique.append((label, src))
+    if not unique:
+        log("Episode's own player has no OK.ru/VidMoly embed.")
     return unique
 
 

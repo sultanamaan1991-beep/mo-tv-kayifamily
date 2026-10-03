@@ -14,7 +14,7 @@ sys.path.insert(0, str(PLUGIN_DIR))
 
 from resources.lib import resolver, subtitles  # noqa: E402
 
-EPISODE_HTML_FIXTURE = """
+EPISODE_HTML_FIXTURE = """<html><body class="postid-123">
 <div class="sp-tab" data-sptab>
 <span class="sp-tab__nav-link sp-tab__active" data-sptoggle="tab" for="#tab-1">
 <span class="tab_title_area"><h4 class="sp-tab__tab_title">moLy</h4></span></span>
@@ -23,7 +23,29 @@ EPISODE_HTML_FIXTURE = """
 <div id="tab-1"><iframe src="https://vidmoly.org/embed-abc123.html"></iframe></div>
 <div id="tab-2"><iframe src="//ok.ru/videoembed/999?nochat=1"></iframe></div>
 </div>
+</body></html>
 """
+
+# A template-injected widget for ANOTHER episode. The resolver must NOT
+# pick these up (issue #3): only post content counts.
+EPISODE_HTML_WITH_WIDGET_FIXTURE = """<html><body class="postid-123">
+<div class="sp-tab" data-sptab>
+<div id="tab-1"><iframe src="https://vidmoly.org/embed-abc123.html"></iframe></div>
+<div id="tab-2"><iframe src="//ok.ru/videoembed/999?nochat=1"></iframe></div>
+</div>
+<div class="latest-videos-widget">
+<iframe src="https://ok.ru/videoembed/111?nochat=1"></iframe>
+<iframe src="https://vidmoly.org/embed-zzz999.html"></iframe>
+</div>
+</body></html>
+"""
+
+POST_API_FIXTURE = (
+    '{"id":123,"link":"https://kayifamilytv.com/ep",'
+    '"content":{"rendered":'
+    '"<div><iframe src=\\"https://vidmoly.org/embed-abc123.html\\"></iframe>'
+    '<iframe src=\\"//ok.ru/videoembed/999?nochat=1\\"></iframe></div>"}}'
+)
 
 OKRU_EMBED_FIXTURE = (
     '{"flashvars":{"referer":"https://kayifamilytv.com/",'
@@ -47,11 +69,46 @@ class FakeSession:
 def test_find_player_sources_extracts_tabs(monkeypatch):
     monkeypatch.setattr(
         resolver, "_Session",
-        lambda: FakeSession({"https://kayifamilytv.com/ep": EPISODE_HTML_FIXTURE}),
+        lambda: FakeSession({
+            "https://kayifamilytv.com/ep": EPISODE_HTML_FIXTURE,
+            "https://kayifamilytv.com/wp-json/wp/v2/posts/123": POST_API_FIXTURE,
+        }),
     )
     sources = resolver.find_player_sources("https://kayifamilytv.com/ep")
     assert ("moly", "https://vidmoly.org/embed-abc123.html") in sources
     assert ("okru", "https://ok.ru/videoembed/999") in sources
+
+
+def test_find_player_sources_ignores_template_widgets(monkeypatch):
+    """Issue #3: iframes outside the episode's own post content (e.g. a
+    'latest videos' widget for other episodes) must never be selected."""
+    monkeypatch.setattr(
+        resolver, "_Session",
+        lambda: FakeSession({
+            "https://kayifamilytv.com/ep": EPISODE_HTML_WITH_WIDGET_FIXTURE,
+            "https://kayifamilytv.com/wp-json/wp/v2/posts/123": POST_API_FIXTURE,
+        }),
+    )
+    sources = resolver.find_player_sources("https://kayifamilytv.com/ep")
+    srcs = [s for _, s in sources]
+    assert not any("videoembed/111" in s for s in srcs)
+    assert not any("zzz999" in s for s in srcs)
+    assert ("okru", "https://ok.ru/videoembed/999") in sources
+
+
+def test_find_player_sources_rejects_identity_mismatch(monkeypatch):
+    """If the API post's canonical link doesn't match the page, fail closed."""
+    bad_post = POST_API_FIXTURE.replace(
+        "https://kayifamilytv.com/ep", "https://kayifamilytv.com/other-ep")
+    monkeypatch.setattr(
+        resolver, "_Session",
+        lambda: FakeSession({
+            "https://kayifamilytv.com/ep": EPISODE_HTML_FIXTURE,
+            "https://kayifamilytv.com/wp-json/wp/v2/posts/123": bad_post,
+        }),
+    )
+    with pytest.raises(resolver.ResolverError):
+        resolver.find_player_sources("https://kayifamilytv.com/ep")
 
 
 def test_unescape_url():

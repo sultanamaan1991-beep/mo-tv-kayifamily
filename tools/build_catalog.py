@@ -139,17 +139,19 @@ def save_playability_cache(cache):
 
 
 def _probe_one(args):
-    """True if the episode page has an ok.ru player whose embed page
-    actually contains stream URLs (mirrors resolver.py's detection);
-    False for legacy layouts or dead embeds; None if a fetch failed."""
+    """True if the episode's OWN post content has an ok.ru player whose
+    embed page actually contains stream URLs.
+
+    Mirrors resolver.py::find_player_sources exactly: only <iframe>
+    embeds inside the post's content.rendered are considered, never the
+    full page HTML (which contains template-injected "latest videos"
+    players belonging to other episodes -- issue #3).
+    False for legacy/no players or dead embeds; None if a fetch failed."""
     import html as html_module
-    post_id, url = args
+    post_id, content = args
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": PROBE_UA})
-        html = urllib.request.urlopen(req, timeout=20).read().decode(
-            "utf-8", "ignore")
         embeds = []
-        for src in _IFRAME_RE.findall(html):
+        for src in _IFRAME_RE.findall(content or ""):
             if _OKRU_RE.search(src):
                 e = src.split("?")[0]
                 if e.startswith("//"):
@@ -157,8 +159,8 @@ def _probe_one(args):
                 if e not in embeds:
                     embeds.append(e)
         if not embeds:
-            return post_id, False  # legacy layout: no ok.ru player
-        # NOTE: vidmoly-only pages are not playable today (VidMoly's own
+            return post_id, False  # no ok.ru player in own content
+        # NOTE: vidmoly-only posts are not playable today (VidMoly's own
         # player is broken upstream), so only ok.ru counts.
         for embed in embeds:
             ereq = urllib.request.Request(
@@ -195,7 +197,7 @@ def resolve_playability(posts):
                 and now - entry.get("checked", 0) < STALE_AFTER):
             verdicts[p["id"]] = entry["playable"]
         else:
-            to_probe.append((p["id"], p["link"]))
+            to_probe.append((p["id"], (p.get("content") or {}).get("rendered")))
     if to_probe:
         with ThreadPoolExecutor(max_workers=8) as ex:
             for pid, result in ex.map(_probe_one, to_probe):
@@ -235,7 +237,7 @@ def build():
                 continue
             posts = api_get_all("/posts", {
                 "categories": season["id"],
-                "_fields": "id,date,modified,slug,link,title,featured_media",
+                "_fields": "id,date,modified,slug,link,title,featured_media,content",
             })
             season_posts[season["id"]] = posts
             all_media_ids.extend(p.get("featured_media") for p in posts)
@@ -245,7 +247,7 @@ def build():
             # category (e.g. Destan, Hayreddin). Treat as Season 1.
             posts = api_get_all("/posts", {
                 "categories": show["id"],
-                "_fields": "id,date,modified,slug,link,title,featured_media",
+                "_fields": "id,date,modified,slug,link,title,featured_media,content",
             })
             season_posts[show["id"]] = posts
             all_media_ids.extend(p.get("featured_media") for p in posts)
@@ -255,7 +257,7 @@ def build():
     # documentaries (flat)
     doc_posts = api_get_all("/posts", {
         "categories": DOCS_CATEGORY,
-        "_fields": "id,date,modified,slug,link,title,featured_media",
+        "_fields": "id,date,modified,slug,link,title,featured_media,content",
     })
     all_media_ids.extend(p.get("featured_media") for p in doc_posts)
 
