@@ -15,5 +15,9 @@
         <description lang="en_GB">Minimal proof-of-concept add-on: resolves one KayiFamily episode to a playable stream and hands it to Kodi's native player. No catalogs, no accounts.</description>
         <platform>all</platform>
         <license>MIT</license>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+        </assets>
     </extension>
 </addon>
