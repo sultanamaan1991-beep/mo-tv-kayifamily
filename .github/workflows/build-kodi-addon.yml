@@ -44,7 +44,7 @@ jobs:
 
       - name: Package release ZIP (validation only, not published)
         run: |
-          VERSION=$(grep -oPm1 '<addon[^>]*version="\K[^"]+' plugin.video.kayifamily/addon.xml)
+          VERSION=$(python3 -c "import xml.etree.ElementTree as ET; print(ET.parse('plugin.video.kayifamily/addon.xml').getroot().attrib['version'])")
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           rm -f "plugin.video.kayifamily-$VERSION.zip"
           zip -r -q "plugin.video.kayifamily-$VERSION.zip" plugin.video.kayifamily \
