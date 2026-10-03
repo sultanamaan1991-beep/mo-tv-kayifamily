@@ -120,61 +120,109 @@ def transcribe_to_srt(audio_path, srt_path, model_name="large-v3",
 
 
 def clean_subtitles(subs):
-    """Apply subtitle quality rules."""
-    cleaned = []
+    """Apply subtitle quality rules. NEVER discards words.
+
+    Long translated segments are split into multiple chronological cues
+    with the available time divided proportionally by text length.
+    """
+    cues = []
     for start, end, text in subs:
         if not text:
             continue
-        # Skip extremely short (< 0.5s) unless it has real content
+        text = re.sub(r'\s+', ' ', text).strip()
+        if not text:
+            continue
         duration = end - start
+        # Skip extremely short (< 0.5s) unless it has real content
         if duration < 0.5 and len(text) < 10:
             continue
-        # Cap duration at 7s
+        # Cap single-cue duration at 7s
         if duration > 7.0:
             end = start + 7.0
-        # Split into max 2 lines, max 42 chars per line
-        text = re.sub(r'\s+', ' ', text).strip()
-        lines = wrap_text(text, max_chars=42, max_lines=2)
-        if not lines:
-            continue
-        cleaned.append((start, end, "\n".join(lines)))
+            duration = 7.0
+        cues.extend(split_into_cues(start, end, text))
 
     # Ensure chronological order and no overlaps
-    cleaned.sort(key=lambda s: s[0])
+    cues.sort(key=lambda s: s[0])
     result = []
-    for start, end, text in cleaned:
+    for start, end, text in cues:
         if result and start < result[-1][1]:
             # Overlap: push start to after previous end
             start = result[-1][1] + 0.04
             if start >= end:
                 continue  # skip if this makes it invalid
-        # Minimum display time 0.8s
+        # Minimum display time 0.8s (extend end when possible)
         if end - start < 0.8:
             end = start + 0.8
         result.append((start, end, text))
     return result
 
 
-def wrap_text(text, max_chars=42, max_lines=2):
-    """Wrap text to max_chars per line, max_lines lines."""
+def wrap_lines(text, max_chars=42):
+    """Wrap text into lines of max_chars. Never truncates; returns all lines."""
     words = text.split()
     lines = []
     current = ""
     for word in words:
-        if len(current) + len(word) + 1 <= max_chars:
-            current = (current + " " + word).strip()
+        candidate = (current + " " + word).strip()
+        if len(candidate) <= max_chars:
+            current = candidate
         else:
             if current:
                 lines.append(current)
             current = word
-            if len(lines) >= max_lines:
-                break
-    if current and len(lines) < max_lines:
+    if current:
         lines.append(current)
-    # If still too long, truncate
-    if len(lines) > max_lines:
-        lines = lines[:max_lines]
     return lines
+
+
+def split_into_cues(start, end, text, max_chars=42, max_lines_per_cue=2,
+                    min_cue_secs=1.0):
+    """Split text into multiple subtitle cues, preserving ALL words.
+
+    Lines are wrapped at max_chars; every max_lines_per_cue lines form one
+    cue. The [start, end] interval is divided proportionally by each
+    cue's character count, with each cue getting at least min_cue_secs
+    when the total duration allows it.
+    """
+    lines = wrap_lines(text, max_chars)
+    if not lines:
+        return []
+    # Group lines into cues of max_lines_per_cue
+    groups = [lines[i:i + max_lines_per_cue]
+              for i in range(0, len(lines), max_lines_per_cue)]
+    if len(groups) == 1:
+        return [(start, end, "\n".join(groups[0]))]
+
+    total_chars = sum(len("".join(g)) for g in groups) or 1
+    duration = end - start
+    cues = []
+    cursor = start
+    for i, group in enumerate(groups):
+        share = len("".join(group)) / total_chars
+        cue_dur = duration * share
+        # Last cue takes whatever remains to avoid rounding drift
+        if i == len(groups) - 1:
+            cue_end = end
+        else:
+            cue_end = cursor + max(cue_dur, min_cue_secs)
+            # Don't let minimums push us past the segment end
+            remaining = len(groups) - i - 1
+            latest_allowed = end - remaining * min_cue_secs
+            if cue_end > latest_allowed:
+                cue_end = latest_allowed
+        cues.append((cursor, cue_end, "\n".join(group)))
+        cursor = cue_end
+    return cues
+
+
+def wrap_text(text, max_chars=42, max_lines=2):
+    """Legacy wrapper: kept for compatibility, now delegates.
+
+    NOTE: callers that need all words preserved should use
+    split_into_cues() instead; this returns at most max_lines lines.
+    """
+    return wrap_lines(text, max_chars)[:max_lines]
 
 
 def write_srt(subs, path):

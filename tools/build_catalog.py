@@ -358,6 +358,15 @@ def build():
                     yt_id = (youtube_mappings.get(yt_key) or {}).get(
                         str(e["number"]))
                 e["youtube_video_id"] = yt_id
+                # subtitle file convention: <show>/s<SS>e<EE>.en.srt
+                # under resources/subtitles/ in the addon ZIP. Kodi
+                # auto-attaches it when the file exists; video plays
+                # normally when it does not.
+                if yt_key:
+                    e["subtitle_file"] = "%s/s%02de%02d.en.srt" % (
+                        yt_key, season_no, e["number"])
+                else:
+                    e["subtitle_file"] = None
                 eps.append(e)
                 full = dict(e)
                 full.update({"show_id": sid, "show_title": stitle,

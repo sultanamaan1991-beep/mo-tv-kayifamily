@@ -141,3 +141,52 @@ def test_broken_vidmoly_with_legacy_falls_through_to_youtube(monkeypatch):
     )
     assert result["source"] == "youtube_official"
     assert "Rh2HDP9zy-U" in result["video_url"]
+
+
+# ---------------------------------------------------------------------------
+# FIX 1: Kayi outage vs identity mismatch
+# ---------------------------------------------------------------------------
+
+def test_kayi_network_failure_falls_back_to_youtube(monkeypatch):
+    """Kayi unreachable + valid YouTube ID -> YouTube succeeds."""
+    def _fail(url):
+        raise resolver.KayiUnavailableError("Could not reach https://kayifamilytv.com: timeout")
+    monkeypatch.setattr(resolver, "_fetch_episode_post", _fail)
+
+    result = resolver.resolve_episode(
+        "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-1/",
+        youtube_video_id="S76TuoUjZDg",
+    )
+    assert result["source"] == "youtube_official"
+    assert result["video_url"].endswith("video_id=S76TuoUjZDg")
+
+
+def test_kayi_identity_mismatch_never_uses_youtube(monkeypatch):
+    """Identity mismatch + valid YouTube ID -> MUST fail closed, no YouTube."""
+    def _mismatch(url):
+        raise resolver.EpisodeIdentityError(
+            "Episode identity mismatch: page X does not match post Y.")
+    monkeypatch.setattr(resolver, "_fetch_episode_post", _mismatch)
+
+    with pytest.raises(resolver.EpisodeIdentityError):
+        resolver.resolve_episode(
+            "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-1/",
+            youtube_video_id="S76TuoUjZDg",
+        )
+
+
+def test_kayi_unavailable_without_youtube_id_fails_clearly(monkeypatch):
+    """Kayi down + no YouTube ID -> clear KayiUnavailableError."""
+    def _fail(url):
+        raise resolver.KayiUnavailableError("Could not reach https://kayifamilytv.com: timeout")
+    monkeypatch.setattr(resolver, "_fetch_episode_post", _fail)
+
+    with pytest.raises(resolver.KayiUnavailableError) as exc_info:
+        resolver.resolve_episode("https://kayifamilytv.com/ep")
+    assert "unreachable" in str(exc_info.value)
+
+
+def test_identity_error_is_resolver_error():
+    """Both new error types remain catchable as ResolverError (back-compat)."""
+    assert issubclass(resolver.KayiUnavailableError, resolver.ResolverError)
+    assert issubclass(resolver.EpisodeIdentityError, resolver.ResolverError)

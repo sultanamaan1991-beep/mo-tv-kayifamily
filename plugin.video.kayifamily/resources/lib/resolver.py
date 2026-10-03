@@ -48,6 +48,26 @@ class ResolverError(Exception):
     """Raised when an episode cannot be resolved to a playable stream."""
 
 
+class KayiUnavailableError(ResolverError):
+    """KayiFamily site/network is unreachable; identity could not be evaluated.
+
+    Covers DNS failures, timeouts, connection refused, and HTTP errors
+    where the episode page (or its WP API post) could not be loaded at
+    all. When this happens, the resolver may fall back to the episode's
+    already-verified official YouTube ID -- the identity of the YouTube
+    video was verified independently at catalog build time.
+    """
+
+
+class EpisodeIdentityError(ResolverError):
+    """Evidence that the loaded page is not the requested episode.
+
+    Covers post-ID/canonical mismatches and pages where the episode
+    cannot be identified. This MUST fail closed: the YouTube fallback
+    is never used to hide an identity mismatch (Issue #3).
+    """
+
+
 class _Session(object):
     """One cookie jar + User-Agent for a whole resolution, like a browser tab."""
 
@@ -69,9 +89,11 @@ class _Session(object):
                 status = resp.status
                 body = resp.read().decode("utf-8", errors="replace")
         except urllib.error.HTTPError as exc:
-            raise ResolverError("HTTP %s while loading %s" % (exc.code, url))
+            raise KayiUnavailableError(
+                "HTTP %s while loading %s" % (exc.code, url))
         except urllib.error.URLError as exc:
-            raise ResolverError("Could not reach %s: %s" % (url, exc.reason))
+            raise KayiUnavailableError(
+                "Could not reach %s: %s" % (url, exc.reason))
         debug("HTTP %s, %d bytes, final URL %s" % (status, len(body), final_url))
         return final_url, body
 
@@ -121,7 +143,7 @@ def _get_post_content(session, episode_url, final_url, html):
     """
     m = _POSTID_RE.search(html)
     if not m:
-        raise ResolverError(
+        raise EpisodeIdentityError(
             "Could not identify the episode on the page (no post ID).")
     post_id = m.group(1)
     debug("Episode post ID: %s" % post_id)
@@ -132,11 +154,14 @@ def _get_post_content(session, episode_url, final_url, html):
         import json
         post = json.loads(body)
     except ValueError:
-        raise ResolverError("Could not read episode data (post %s)." % post_id)
+        # API returned something unparseable: identity could not be
+        # evaluated (site issue), not evidence of a wrong episode.
+        raise KayiUnavailableError(
+            "Could not read episode data (post %s)." % post_id)
 
     canonical = (post.get("link") or "").rstrip("/")
     if canonical and canonical != final_url.rstrip("/"):
-        raise ResolverError(
+        raise EpisodeIdentityError(
             "Episode identity mismatch: page %s does not match post %s."
             % (final_url, canonical))
     debug("Episode identity confirmed: %s" % canonical)
@@ -235,18 +260,37 @@ def resolve_episode(episode_url, preferred_source="auto", youtube_video_id=None)
       3. approved official fallback: verified broadcaster YouTube video ID
       4. fail clearly -- never substitute another episode's video
 
-    Identity scoping (issue #3) is preserved at every step: only the
-    episode's own post content is ever inspected. The YouTube fallback
-    uses an explicit per-episode verified video ID -- never a search.
+    Kayi outage vs identity mismatch (Issue #3 stays intact):
+      - KayiUnavailableError (network/site down, identity could not be
+        evaluated) -> may fall back to the verified official YouTube ID.
+      - EpisodeIdentityError (page/post mismatch, wrong episode evidence)
+        -> fails closed immediately; YouTube is never used to hide it.
+
+    The YouTube fallback uses an explicit per-episode verified video ID
+    from the catalog -- never a search or a guess.
     """
     # deferred to avoid a circular import (legacy imports ResolverError)
     from .legacy import detect_legacy_players, resolve_legacy
 
     log("Resolving episode: %s" % episode_url)
     session = _Session()
-    content, _ = _fetch_episode_post(episode_url)
-    sources = _sources_from_content(content)
-    debug("Player tabs found: %s" % [label for label, _ in sources])
+    try:
+        content, _ = _fetch_episode_post(episode_url)
+    except EpisodeIdentityError:
+        # Fail closed: never paper over an identity problem with YouTube.
+        raise
+    except KayiUnavailableError as exc:
+        # Site/network down before identity could be evaluated: the
+        # per-episode YouTube ID was verified independently, so it is
+        # safe to fall back to it.
+        log("Kayi unavailable (%s); trying official YouTube fallback." % exc)
+        content = None
+
+    sources = []
+    legacy = []
+    if content is not None:
+        sources = _sources_from_content(content)
+        debug("Player tabs found: %s" % [label for label, _ in sources])
 
     if preferred_source and preferred_source != "auto":
         ordered = sorted(
@@ -280,8 +324,11 @@ def resolve_episode(episode_url, preferred_source="auto", youtube_video_id=None)
             debug("Source '%s' failed: %s" % (label, exc))
 
     # All modern sources failed (or there were none): try every legacy
-    # source from the SAME post before giving up.
-    legacy = detect_legacy_players(content)
+    # source from the SAME post before giving up. Skipped entirely when
+    # Kayi was unreachable (content is None) -- there is no post to
+    # inspect, so go straight to the YouTube fallback.
+    if content is not None:
+        legacy = detect_legacy_players(content)
     for player_type, iframe_url in legacy:
         try:
             result = resolve_legacy(player_type, iframe_url, session)
@@ -306,6 +353,10 @@ def resolve_episode(episode_url, preferred_source="auto", youtube_video_id=None)
             debug("YouTube fallback failed: %s" % exc)
 
     if not sources and not legacy and not youtube_video_id:
+        if content is None:
+            raise KayiUnavailableError(
+                "KayiFamily is unreachable and no official YouTube "
+                "fallback is mapped for this episode.")
         raise ResolverError("No video player found on the episode page.")
     raise ResolverError(
         "Could not resolve a playable stream. Tried: %s" % "; ".join(errors)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.kayifamily"
-       version="0.4.0"
+       version="0.4.1"
        name="KayiFamily TV"
        provider-name="KayiFamily TV PoC">
     <requires>
@@ -12,8 +12,8 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Browse and play English-subtitled Turkish series from KayiFamily (proof of concept)</summary>
-        <description lang="en_GB">Minimal proof-of-concept add-on: resolves one KayiFamily episode to a playable stream and hands it to Kodi's native player. No catalogs, no accounts.</description>
+        <summary lang="en_GB">Browse and play Turkish historical series with official broadcaster fallback</summary>
+        <description lang="en_GB">Kodi add-on for browsing and playing selected Turkish historical series (Mehmed: Fetihler Sultani, Kurulus Orhan, Salahuddin Ayyubi) using KayiFamily sources with verified official TRT1/ATV YouTube fallback. Full episode catalog, per-episode source selection, optional YouTube add-on for fallback playback. No accounts required by this add-on itself.</description>
         <platform>all</platform>
         <license>MIT</license>
         <assets>

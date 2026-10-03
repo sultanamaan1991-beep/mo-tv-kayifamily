@@ -23,6 +23,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+import xbmcvfs
 
 from resources.lib.logger import log, debug
 from resources.lib.resolver import resolve_episode, ResolverError
@@ -48,7 +49,7 @@ def _add_dir(label, params, art=None, info=None, is_folder=True):
 
 
 def _playable_episode(label, episode_url, art=None, info=None,
-                      youtube_video_id=None):
+                      youtube_video_id=None, subtitle_file=None):
     """A single playable episode entry (IsPlayable -> action=play)."""
     item = xbmcgui.ListItem(label=label, offscreen=True)
     item.setProperty("IsPlayable", "true")
@@ -60,7 +61,8 @@ def _playable_episode(label, episode_url, art=None, info=None,
     xbmcplugin.addDirectoryItem(
         HANDLE,
         _url(action="play", url=episode_url, title=label,
-             youtube_video_id=youtube_video_id or ""),
+             youtube_video_id=youtube_video_id or "",
+             subtitle_file=subtitle_file or ""),
         item,
         False,
     )
@@ -101,7 +103,8 @@ def list_root():
     _add_dir("Latest Episodes", {"action": "latest"})
     _add_dir("All Shows", {"action": "shows"})
     _add_dir("Search", {"action": "search"})
-    _add_dir("Documentaries", {"action": "docs"})
+    # Phase 1: Documentaries hidden (catalog has zero; support kept for later).
+    # _add_dir("Documentaries", {"action": "docs"})
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -115,7 +118,8 @@ def list_latest(catalog):
         info["title"] = label
         _playable_episode(label, entry.get("url"),
                           art=_episode_art(show, entry), info=info,
-                          youtube_video_id=entry.get("youtube_video_id"))
+                          youtube_video_id=entry.get("youtube_video_id"),
+                          subtitle_file=entry.get("subtitle_file"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -167,7 +171,8 @@ def list_episodes(catalog, show_id, season_no):
         _playable_episode(label, ep.get("url"),
                           art=_episode_art(show, ep),
                           info=_episode_info(show, season_no, ep),
-                          youtube_video_id=ep.get("youtube_video_id"))
+                          youtube_video_id=ep.get("youtube_video_id"),
+                          subtitle_file=ep.get("subtitle_file"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -209,15 +214,16 @@ def do_search(catalog):
             _playable_episode(label, ep.get("url"),
                               art=_episode_art(show, ep),
                               info=_episode_info(show, hit["season"], ep),
-                              youtube_video_id=ep.get("youtube_video_id"))
+                              youtube_video_id=ep.get("youtube_video_id"),
+                              subtitle_file=ep.get("subtitle_file"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def play(episode_url, title, youtube_video_id=None):
+def play(episode_url, title, youtube_video_id=None, subtitle_file=None):
     preferred = ADDON.getSettingString("preferred_source") or "Auto"
     preferred = preferred.lower()
-    log("Play requested: %s (preferred source: %s, youtube: %s)"
-        % (episode_url, preferred, bool(youtube_video_id)))
+    log("Play requested: %s (preferred source: %s, youtube: %s, srt: %s)"
+        % (episode_url, preferred, bool(youtube_video_id), subtitle_file))
     try:
         result = resolve_episode(episode_url, preferred_source=preferred,
                                  youtube_video_id=youtube_video_id or None)
@@ -267,12 +273,66 @@ def play(episode_url, title, youtube_video_id=None):
         )
     # stream_type "youtube": video_url is a plugin:// URL for
     # plugin.video.youtube -- no headers or inputstream needed, Kodi
-    # hands it off directly.
+    # hands it off directly. But the YouTube addon must be installed;
+    # never hand Kodi a plugin:// URL it cannot resolve.
+    if stream_type == "youtube" and not _youtube_addon_available():
+        _notify_youtube_addon_missing()
+        xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+        return
 
     subtitles_lib.attach(item, result.get("subtitles") or [])
 
+    # Auto-attach bundled English SRT when it exists for this episode.
+    # Video plays normally when the file is missing -- subtitles never
+    # block playback.
+    if subtitle_file:
+        _attach_bundled_subtitle(item, subtitle_file)
+
     log("Handing to Kodi player: %s [%s]" % (result["source"], stream_type))
     xbmcplugin.setResolvedUrl(HANDLE, True, item)
+
+
+def _attach_bundled_subtitle(item, subtitle_file):
+    """Attach resources/subtitles/<file> when it exists in the addon."""
+    import os
+    # Basic path safety: must stay under resources/subtitles/.
+    if not subtitle_file or ".." in subtitle_file or subtitle_file.startswith("/"):
+        return
+    addon_path = ADDON.getAddonInfo("path")
+    srt_path = os.path.join(addon_path, "resources", "subtitles", subtitle_file)
+    if xbmcvfs.exists(srt_path):
+        log("Attaching bundled subtitle: %s" % subtitle_file)
+        item.setSubtitles([srt_path])
+    else:
+        debug("No bundled subtitle yet: %s" % subtitle_file)
+
+
+YOUTUBE_ADDON_ID = "plugin.video.youtube"
+
+
+def _youtube_addon_available():
+    """True when plugin.video.youtube is installed and enabled."""
+    try:
+        return bool(xbmc.getCondVisibility(
+            "System.HasAddon(%s)" % YOUTUBE_ADDON_ID))
+    except Exception:
+        return False
+
+
+def _notify_youtube_addon_missing():
+    """Clear dialog when an episode needs the YouTube addon."""
+    log("YouTube addon not installed; cannot play official fallback.",
+        xbmc.LOGWARNING)
+    install = xbmcgui.Dialog().yesno(
+        "KayiFamily TV",
+        "This episode uses the official YouTube source.\n"
+        "Install the YouTube add-on from the Kodi repository to play it.",
+        yeslabel="Open add-on browser",
+        nolabel="Cancel",
+    )
+    if install:
+        # Open Kodi's addon browser so the user can install it normally.
+        xbmc.executebuiltin("ActivateWindow(AddonBrowser,addons://all/xbmc.addon.video)")
 
 
 def router():
@@ -281,7 +341,8 @@ def router():
     debug("Router action=%s" % action)
     if action == "play":
         play(params["url"], params.get("title", "Episode"),
-             youtube_video_id=params.get("youtube_video_id") or None)
+             youtube_video_id=params.get("youtube_video_id") or None,
+             subtitle_file=params.get("subtitle_file") or None)
         return
     catalog, from_cache = catalog_lib.load_catalog()
     debug("Catalog loaded (%d shows, from_cache=%s)"
