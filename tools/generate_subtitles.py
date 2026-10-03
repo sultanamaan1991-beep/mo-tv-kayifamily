@@ -5,7 +5,7 @@ Workflow:
   1. Get episode audio (local file via --input, or YouTube download)
   2. Transcribe Turkish -> English using Faster-Whisper (translate task)
   3. Post-process: clean up formatting, enforce subtitle quality rules
-  4. Save as .srt in subtitles/<show>/s<season>e<episode>.en.srt
+  4. Save as .srt in plugin.video.kayifamily/resources/subtitles/<show>/s<SS>e<EE>.en.srt
 
 Usage:
   # From local authorized file (recommended):
@@ -120,10 +120,16 @@ def transcribe_to_srt(audio_path, srt_path, model_name="large-v3",
 
 
 def clean_subtitles(subs):
-    """Apply subtitle quality rules. NEVER discards words.
+    """Apply subtitle quality rules. NEVER discards words for timing reasons.
 
     Long translated segments are split into multiple chronological cues
     with the available time divided proportionally by text length.
+
+    Timing normalization priorities (in order):
+      1. Preserve every cue (no dialogue dropped for tight timing).
+      2. Chronological order, no overlaps, no negative durations.
+      3. 0.8s minimum display as a TARGET where space allows -- never a
+         reason to delete text.
     """
     cues = []
     for start, end, text in subs:
@@ -133,7 +139,7 @@ def clean_subtitles(subs):
         if not text:
             continue
         duration = end - start
-        # Skip extremely short (< 0.5s) unless it has real content
+        # Skip likely Whisper noise: extremely short with almost no content.
         if duration < 0.5 and len(text) < 10:
             continue
         # Cap single-cue duration at 7s
@@ -142,20 +148,45 @@ def clean_subtitles(subs):
             duration = 7.0
         cues.extend(split_into_cues(start, end, text))
 
-    # Ensure chronological order and no overlaps
     cues.sort(key=lambda s: s[0])
-    result = []
+    cues = _normalize_timing(cues)
+    return cues
+
+
+def _normalize_timing(cues, gap=0.04, target_min=0.8, abs_min=0.2):
+    """Resolve overlaps without ever dropping a cue.
+
+    Pass 1: walk chronologically; push each cue's start past the previous
+    cue's end (+gap). If the adjusted start passes the cue's original end
+    (extreme overlap), keep the cue with abs_min duration rather than
+    deleting it -- content preservation beats timing precision.
+    Pass 2: extend cues toward target_min where the gap to the next cue
+    allows it, without creating new overlaps.
+    """
+    # Pass 1: eliminate overlaps, preserve everything
+    adjusted = []
+    cursor = 0.0
     for start, end, text in cues:
-        if result and start < result[-1][1]:
-            # Overlap: push start to after previous end
-            start = result[-1][1] + 0.04
-            if start >= end:
-                continue  # skip if this makes it invalid
-        # Minimum display time 0.8s (extend end when possible)
-        if end - start < 0.8:
-            end = start + 0.8
-        result.append((start, end, text))
-    return result
+        s = max(start, cursor)
+        # Guarantee a positive duration even under extreme overlap
+        e = max(end, s + abs_min)
+        adjusted.append([s, e, text])
+        cursor = e + gap
+
+    # Pass 2: extend short cues toward target_min where space allows
+    for i, (s, e, text) in enumerate(adjusted):
+        if e - s >= target_min:
+            continue
+        if i + 1 < len(adjusted):
+            next_start = adjusted[i + 1][0]
+            allowed_end = next_start - gap
+        else:
+            allowed_end = s + target_min  # last cue: free to extend
+        new_end = min(s + target_min, allowed_end)
+        if new_end > e:
+            adjusted[i][1] = new_end
+
+    return [(s, e, t) for s, e, t in adjusted]
 
 
 def wrap_lines(text, max_chars=42):
@@ -244,6 +275,20 @@ def fmt_time(seconds):
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 
+def subtitle_output_path(show, season, episode):
+    """Return the addon-bundled SRT path for an episode.
+
+    This MUST match where Kodi looks: the addon's
+    resources/subtitles/ directory, so a generated file lands
+    directly in the packaged ZIP with no manual copying.
+    """
+    filename = f"s{season:02d}e{episode:02d}.en.srt"
+    return os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "..", "plugin.video.kayifamily",
+        "resources", "subtitles", show, filename)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate English SRT from official episode audio")
@@ -267,10 +312,8 @@ def main():
     # Paths
     work_dir = "/tmp/subtitle_work"
     os.makedirs(work_dir, exist_ok=True)
-    srt_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "..",
-        "subtitles", args.show,
-        f"s{args.season:02d}e{args.episode:02d}.en.srt")
+    # Output lands directly in the addon resources (bundled into the ZIP).
+    srt_path = subtitle_output_path(args.show, args.season, args.episode)
 
     # Step 1: Get audio (local file or YouTube download)
     if args.input:

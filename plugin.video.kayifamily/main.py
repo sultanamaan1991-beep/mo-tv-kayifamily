@@ -1,19 +1,20 @@
 """KayiFamily TV - Kodi video add-on.
 
-Navigation:
+Navigation (Phase 1):
     KayiFamily TV
         ├── Latest Episodes
         ├── All Shows
         │     └── Show
         │           └── Season
         │                 └── Episode -> Play
-        ├── Search
-        └── Documentaries
+        └── Search
+
+(Documentaries hidden in Phase 1; list_docs() kept for future use.)
 
 The episode catalog is a single JSON file built outside Kodi
 (tools/build_catalog.py) and cached locally -- browsing never crawls
-the website and never resolves video streams. Play calls the frozen
-resolver.py flow exactly as the proven Episode 85 implementation does.
+the website and never resolves video streams. Play resolves via the
+adapter chain (Kayi modern -> Kayi legacy -> official YouTube fallback).
 """
 
 import sys
@@ -283,10 +284,17 @@ def play(episode_url, title, youtube_video_id=None, subtitle_file=None):
     subtitles_lib.attach(item, result.get("subtitles") or [])
 
     # Auto-attach bundled English SRT when it exists for this episode.
-    # Video plays normally when the file is missing -- subtitles never
-    # block playback.
-    if subtitle_file:
+    # SOURCE-AWARE RULE (sync safety): the generated SRT is transcribed
+    # from the official TRT/ATV YouTube video, so it is only attached
+    # when the YouTube official source won. Kayi OK.ru videos have their
+    # own burned-in English and a different edit -- never attach the
+    # YouTube-generated SRT to them. Video plays normally when the file
+    # is missing; subtitles never block playback.
+    if subtitle_file and result.get("source") == "youtube_official":
         _attach_bundled_subtitle(item, subtitle_file)
+    elif subtitle_file:
+        debug("Skipping bundled subtitle for non-YouTube source '%s' "
+              "(sync safety)." % result.get("source"))
 
     log("Handing to Kodi player: %s [%s]" % (result["source"], stream_type))
     xbmcplugin.setResolvedUrl(HANDLE, True, item)

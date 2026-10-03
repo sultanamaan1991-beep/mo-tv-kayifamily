@@ -130,6 +130,16 @@ def _fake_youtube_result():
     }
 
 
+def _fake_kayi_result():
+    return {
+        "video_url": "https://cdn.example/video.m3u8",
+        "stream_type": "hls",
+        "headers": {"Referer": "https://ok.ru/videoembed/123"},
+        "subtitles": [],
+        "source": "okru",
+    }
+
+
 def test_missing_youtube_addon_clear_failure(kodi_no_youtube):
     """FIX 4: YouTube needed but addon missing -> clear dialog, no blind handoff."""
     main = _load_main()
@@ -192,3 +202,25 @@ def test_youtube_present_no_dialog(kodi_with_youtube_no_srt):
         main.play("https://kayifamilytv.com/ep", "EP1",
                   youtube_video_id="KEWP2dELhrY")
     assert not kodi_with_youtube_no_srt["dialog"].yesno.called
+
+
+def test_kayi_source_does_not_attach_official_srt(kodi_with_youtube_srt):
+    """FIX 2: Kayi OK.ru won + SRT exists -> SRT NOT attached (sync safety).
+
+    The generated SRT is transcribed from the official YouTube video;
+    the Kayi video has its own burned-in English and a different edit.
+    """
+    main = _load_main()
+    with patch.object(main, "resolve_episode",
+                      return_value=_fake_kayi_result()):
+        main.HANDLE = 1
+        main.play("https://kayifamilytv.com/ep", "EP50",
+                  youtube_video_id="-KFOEe2oVos",
+                  subtitle_file="mehmed/s03e01.en.srt")
+    items = kodi_with_youtube_srt["listitems"]
+    played = items[-1]
+    # SRT file exists (mock says so) but source is Kayi -> not attached
+    assert played.subtitles is None
+    # Video still plays
+    resolve_calls = kodi_with_youtube_srt["xbmcplugin"].setResolvedUrl.call_args_list
+    assert resolve_calls[0][0][1] is True

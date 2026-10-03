@@ -16,6 +16,7 @@ sys.path.insert(0, str(TOOLS_DIR))
 from generate_subtitles import (  # noqa: E402
     clean_subtitles,
     split_into_cues,
+    subtitle_output_path,
     wrap_lines,
 )
 
@@ -79,3 +80,55 @@ def test_empty_text_no_cues():
     assert split_into_cues(0.0, 5.0, "") == []
     assert split_into_cues(0.0, 5.0, "   ") == []
     assert clean_subtitles([(0.0, 5.0, "")]) == []
+
+
+def test_output_path_matches_addon_resources():
+    """FIX 1: generator output must land where Kodi looks for bundled SRTs."""
+    import os
+    path = subtitle_output_path("mehmed", 1, 1)
+    # Must be under the addon's resources/subtitles/ directory
+    assert "plugin.video.kayifamily" in path
+    assert os.path.join("resources", "subtitles", "mehmed") in path
+    assert path.endswith(os.path.join("mehmed", "s01e01.en.srt"))
+    # And it must match the catalog's subtitle_file convention
+    rel = os.path.relpath(
+        path,
+        os.path.join(os.path.dirname(path).split("plugin.video.kayifamily")[0],
+                     "plugin.video.kayifamily", "resources", "subtitles"))
+    assert rel == os.path.join("mehmed", "s01e01.en.srt")
+
+
+def test_adjacent_short_segments_preserve_all_words():
+    """FIX 3 edge case: tightly-packed short cues must not lose dialogue."""
+    segs = [
+        (0.00, 0.30, "First sentence"),
+        (0.31, 0.60, "Second sentence"),
+        (0.61, 0.90, "Third sentence"),
+    ]
+    cleaned = clean_subtitles(segs)
+    # ALL words from A+B+C must survive
+    out_text = " ".join(t for _, _, t in cleaned)
+    expected = "First sentence Second sentence Third sentence"
+    assert _words(expected) == _words(out_text)
+    # Chronological, no negative durations, no reversed timestamps
+    assert len(cleaned) == 3
+    for s, e, _ in cleaned:
+        assert e > s, "non-positive duration"
+    for i in range(1, len(cleaned)):
+        assert cleaned[i][0] >= cleaned[i - 1][0], "out of order"
+        assert cleaned[i][0] >= cleaned[i - 1][1] - 0.001, "overlap"
+
+
+def test_extreme_overlap_never_drops_cue():
+    """Even fully-overlapping cues are preserved (shortened, not deleted)."""
+    segs = [
+        (0.0, 5.0, "Long first cue with plenty of words here"),
+        (1.0, 1.5, "Tiny overlapping cue"),
+        (2.0, 6.0, "Another cue overlapping the first"),
+    ]
+    cleaned = clean_subtitles(segs)
+    out_text = " ".join(t for _, _, t in cleaned)
+    for word in ["Tiny", "overlapping", "Another"]:
+        assert word in out_text, "cue dropped: %s" % word
+    for s, e, _ in cleaned:
+        assert e > s
