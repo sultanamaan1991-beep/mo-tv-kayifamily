@@ -42,6 +42,10 @@ SKIP_TITLE_RE = re.compile(r"trailer|promo|teaser|\bost\b|news|recap", re.IGNORE
 _IFRAME_RE = re.compile(r'<iframe[^>]+src="([^"]+)"', re.IGNORECASE)
 _OKRU_RE = re.compile(r"(?:https?:)?//ok\.ru/videoembed/(\d+)", re.IGNORECASE)
 _MOLY_RE = re.compile(r"https?://vidmoly\.org/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
+_HLS_RE = re.compile(r'"hlsManifestUrl"\s*:\s*"(https?://[^"]+)"')
+_MP4_RE = re.compile(
+    r'"name"\s*:\s*"(?:mobile|lowest|low|sd|hd|full)"\s*,\s*'
+    r'"url"\s*:\s*"(https?://[^"]+)"')
 CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           ".playability-cache.json")
 PROBE_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -135,17 +139,37 @@ def save_playability_cache(cache):
 
 
 def _probe_one(args):
-    """Fetch an episode page; True if it has a resolver-playable player,
-    False if legacy layout, None if the fetch itself failed."""
+    """True if the episode page has an ok.ru player whose embed page
+    actually contains stream URLs (mirrors resolver.py's detection);
+    False for legacy layouts or dead embeds; None if a fetch failed."""
+    import html as html_module
     post_id, url = args
     try:
         req = urllib.request.Request(url, headers={"User-Agent": PROBE_UA})
         html = urllib.request.urlopen(req, timeout=20).read().decode(
             "utf-8", "ignore")
+        embeds = []
         for src in _IFRAME_RE.findall(html):
-            if _OKRU_RE.search(src) or _MOLY_RE.search(src):
+            if _OKRU_RE.search(src):
+                e = src.split("?")[0]
+                if e.startswith("//"):
+                    e = "https:" + e
+                if e not in embeds:
+                    embeds.append(e)
+        if not embeds:
+            return post_id, False  # legacy layout: no ok.ru player
+        # NOTE: vidmoly-only pages are not playable today (VidMoly's own
+        # player is broken upstream), so only ok.ru counts.
+        for embed in embeds:
+            ereq = urllib.request.Request(
+                embed, headers={"User-Agent": PROBE_UA,
+                                "Referer": "https://kayifamilytv.com/"})
+            page = html_module.unescape(
+                urllib.request.urlopen(ereq, timeout=20).read().decode(
+                    "utf-8", "ignore")).replace("\\/", "/")
+            if _HLS_RE.search(page) or _MP4_RE.search(page):
                 return post_id, True
-        return post_id, False
+        return post_id, False  # embed(s) present but video dead/removed
     except Exception:
         return post_id, None
 
@@ -154,17 +178,21 @@ def resolve_playability(posts):
     """Return {post_id: bool} for playable episodes.
 
     Incremental: cached verdicts are reused when the post's `modified`
-    date is unchanged; only new/changed posts are probed (parallel).
-    Posts whose probe fails and have no cached verdict are excluded
-    (retried on the next build).
+    date is unchanged and the verdict is fresher than 7 days; only
+    new/changed/stale posts are probed (parallel). Posts whose probe
+    fails and have no cached verdict are excluded (retried next build).
     """
+    import time
+    STALE_AFTER = 7 * 24 * 3600
+    now = time.time()
     cache = load_playability_cache()
     verdicts = {}
     to_probe = []
     for p in posts:
         pid = str(p["id"])
         entry = cache.get(pid)
-        if entry and entry.get("modified") == p.get("modified"):
+        if (entry and entry.get("modified") == p.get("modified")
+                and now - entry.get("checked", 0) < STALE_AFTER):
             verdicts[p["id"]] = entry["playable"]
         else:
             to_probe.append((p["id"], p["link"]))
@@ -180,7 +208,7 @@ def resolve_playability(posts):
                     continue
                 verdicts[pid] = result
                 cache[str(pid)] = {"modified": post.get("modified"),
-                                   "playable": result}
+                                   "playable": result, "checked": now}
         save_playability_cache(cache)
     return verdicts
 

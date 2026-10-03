@@ -62,7 +62,7 @@ def main():
     ok &= check("root menu (4 items)", len(root) == 4, labels)
 
     shows = ls(BASE + "?action=shows")
-    ok &= check("shows list", len(shows) == 8, "%d shows" % len(shows))
+    ok &= check("shows list", len(shows) == 3, "%d shows" % len(shows))
     art = (shows[0].get("art") or {}) if shows else {}
     ok &= check("show artwork present", bool(art.get("poster")), list(art.keys()))
 
