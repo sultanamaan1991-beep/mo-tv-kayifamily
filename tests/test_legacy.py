@@ -71,3 +71,40 @@ def test_resolve_legacy_fails_clearly():
 def test_legacy_error_is_resolver_error():
     from resources.lib.resolver import ResolverError
     assert issubclass(LegacyPlayerError, ResolverError)
+
+
+def test_chain_tries_legacy_after_modern_fails(monkeypatch):
+    """BLOCKER 2: legacy from the SAME post must be tried when modern fails."""
+    import sys
+    from pathlib import Path
+    PLUGIN_DIR = Path(__file__).resolve().parents[1] / "plugin.video.kayifamily"
+    sys.path.insert(0, str(PLUGIN_DIR))
+    from resources.lib import resolver
+
+    post_html = (
+        '<iframe src="https://vidmoly.org/embed-broken123.html"></iframe>'
+        '<iframe src="https://wakeupummah.com/fireplayer/video/abc123"></iframe>'
+    )
+    monkeypatch.setattr(resolver, "_fetch_episode_post",
+                        lambda url: (post_html, url))
+    # modern source fails
+    def fake_player_source(label, url):
+        raise resolver.ResolverError("upstream broken")
+    monkeypatch.setattr(resolver, "resolve_player_source", fake_player_source)
+
+    # legacy adapter succeeds (simulating a future working adapter)
+    from resources.lib import legacy
+    def fake_legacy(ptype, url, session):
+        return {"video_url": "https://cdn.example/legacy.mp4",
+                "stream_type": "mp4", "headers": {}, "subtitles": []}
+    monkeypatch.setattr(legacy, "resolve_legacy", fake_legacy)
+    # re-import to pick up monkeypatched legacy.resolve_legacy
+    import importlib
+    importlib.reload(resolver)
+    monkeypatch.setattr(resolver, "_fetch_episode_post",
+                        lambda url: (post_html, url))
+    monkeypatch.setattr(resolver, "resolve_player_source", fake_player_source)
+
+    result = resolver.resolve_episode("https://kayifamilytv.com/ep")
+    assert result["source"] == "legacy:wakeupummah"
+    assert result["video_url"] == "https://cdn.example/legacy.mp4"

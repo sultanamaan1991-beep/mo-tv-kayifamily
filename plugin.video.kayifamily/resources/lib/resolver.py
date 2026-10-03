@@ -311,25 +311,21 @@ def resolve_episode(episode_url, preferred_source="auto"):
     """Resolve a public KayiFamily episode page to a playable stream dict.
 
     Source chain per episode (issue #4):
-      1. modern player (OK.ru / VidMoly) from the episode's OWN post
-      2. legacy player adapter (detected, currently reports unsupported)
-      3. fail clearly -- never substitute another episode's video
+      1. every modern source (OK.ru / VidMoly) from the episode's OWN post
+      2. every legacy source from THAT SAME post (wakeupummah/vk/videa)
+      3. approved alternate adapters, if any are configured
+      4. fail clearly -- never substitute another episode's video
+
+    Identity scoping (issue #3) is preserved at every step: only the
+    episode's own post content is ever inspected.
     """
     # deferred to avoid a circular import (legacy imports ResolverError)
     from .legacy import detect_legacy_players, resolve_legacy
 
     log("Resolving episode: %s" % episode_url)
+    session = _Session()
     content, _ = _fetch_episode_post(episode_url)
     sources = _sources_from_content(content)
-    if not sources:
-        # No modern player: check for a legacy player before failing.
-        # Legacy players are detected but not yet resolvable -- the
-        # episode stays visible and fails clearly (issue #4).
-        legacy = detect_legacy_players(content)
-        if legacy:
-            player_type, iframe_url = legacy[0]
-            resolve_legacy(player_type, iframe_url, None)
-        raise ResolverError("No video player found on the episode page.")
     debug("Player tabs found: %s" % [label for label, _ in sources])
 
     if preferred_source and preferred_source != "auto":
@@ -363,6 +359,23 @@ def resolve_episode(episode_url, preferred_source="auto"):
             errors.append("%s: %s" % (label, exc))
             debug("Source '%s' failed: %s" % (label, exc))
 
+    # All modern sources failed (or there were none): try every legacy
+    # source from the SAME post before giving up.
+    legacy = detect_legacy_players(content)
+    for player_type, iframe_url in legacy:
+        try:
+            result = resolve_legacy(player_type, iframe_url, session)
+            log("Resolved via legacy '%s'" % player_type)
+            result["source"] = "legacy:" + player_type
+            return result
+        except ResolverError as exc:
+            errors.append("legacy-%s: %s" % (player_type, exc))
+            debug("Legacy '%s' failed: %s" % (player_type, exc))
+
+    # Approved alternate adapters would be tried here (none configured).
+
+    if not sources and not legacy:
+        raise ResolverError("No video player found on the episode page.")
     raise ResolverError(
         "Could not resolve a playable stream. Tried: %s" % "; ".join(errors)
     )
