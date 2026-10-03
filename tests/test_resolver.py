@@ -112,14 +112,16 @@ def test_find_player_sources_rejects_identity_mismatch(monkeypatch):
 
 
 def test_unescape_url():
-    assert resolver._unescape_url("https:\\/\\/x\\/y?a\\u0026b=1") == \
+    from resources.lib.adapters import kayi_okru
+    assert kayi_okru._unescape_url("https:\\/\\/x\\/y?a\\u0026b=1") == \
         "https://x/y?a&b=1"
 
 
 def test_resolve_okru_prefers_hls(monkeypatch):
+    from resources.lib.adapters import kayi_okru
     session = FakeSession({"https://ok.ru/videoembed/999": OKRU_EMBED_FIXTURE})
-    url, stype, headers, subs = resolver._resolve_okru(
-        session, "https://ok.ru/videoembed/999")
+    url, stype, headers, subs = kayi_okru.resolve(
+        "https://ok.ru/videoembed/999", session)
     assert stype == "hls"
     assert url == "https://cdn.example/video.m3u8?cmd=x&expires=1&sig=zz"
     assert headers["Referer"] == "https://ok.ru/videoembed/999"
@@ -128,10 +130,11 @@ def test_resolve_okru_prefers_hls(monkeypatch):
 
 
 def test_resolve_okru_falls_back_to_best_mp4(monkeypatch):
+    from resources.lib.adapters import kayi_okru
     import re
     html = re.sub(r'"hlsManifestUrl":"[^"]*",?', "", OKRU_EMBED_FIXTURE)
     session = FakeSession({"https://ok.ru/videoembed/999": html})
-    url, stype, _, _ = resolver._resolve_okru(session, "https://ok.ru/videoembed/999")
+    url, stype, _, _ = kayi_okru.resolve("https://ok.ru/videoembed/999", session)
     assert stype == "mp4"
     assert "type=5" in url  # 'full' beats 'hd'
 
@@ -147,7 +150,7 @@ def test_resolve_episode_contract(monkeypatch):
     )
     monkeypatch.setattr(
         resolver, "resolve_player_source",
-        lambda label, surl: ("https://cdn.example/v.m3u8", "hls",
+        lambda label, surl, session=None: ("https://cdn.example/v.m3u8", "hls",
                              {"Referer": surl}, []),
     )
     result = resolver.resolve_episode("https://kayifamilytv.com/ep")
@@ -168,7 +171,7 @@ def test_resolve_episode_auto_prefers_okru(monkeypatch):
                          ("okru", "https://ok.ru/videoembed/999")],
     )
 
-    def fake_source(label, surl):
+    def fake_source(label, surl, session=None):
         calls.append(label)
         if label == "moly":
             raise resolver.ResolverError("broken upstream")

@@ -47,7 +47,8 @@ def _add_dir(label, params, art=None, info=None, is_folder=True):
     xbmcplugin.addDirectoryItem(HANDLE, _url(**params), item, is_folder)
 
 
-def _playable_episode(label, episode_url, art=None, info=None):
+def _playable_episode(label, episode_url, art=None, info=None,
+                      youtube_video_id=None):
     """A single playable episode entry (IsPlayable -> action=play)."""
     item = xbmcgui.ListItem(label=label, offscreen=True)
     item.setProperty("IsPlayable", "true")
@@ -58,7 +59,8 @@ def _playable_episode(label, episode_url, art=None, info=None):
     item.setInfo("video", info)
     xbmcplugin.addDirectoryItem(
         HANDLE,
-        _url(action="play", url=episode_url, title=label),
+        _url(action="play", url=episode_url, title=label,
+             youtube_video_id=youtube_video_id or ""),
         item,
         False,
     )
@@ -112,7 +114,8 @@ def list_latest(catalog):
         info = _episode_info(show, entry.get("season"), entry)
         info["title"] = label
         _playable_episode(label, entry.get("url"),
-                          art=_episode_art(show, entry), info=info)
+                          art=_episode_art(show, entry), info=info,
+                          youtube_video_id=entry.get("youtube_video_id"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -163,7 +166,8 @@ def list_episodes(catalog, show_id, season_no):
         label = "Episode %d" % ep.get("number")
         _playable_episode(label, ep.get("url"),
                           art=_episode_art(show, ep),
-                          info=_episode_info(show, season_no, ep))
+                          info=_episode_info(show, season_no, ep),
+                          youtube_video_id=ep.get("youtube_video_id"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -204,16 +208,19 @@ def do_search(catalog):
             label = _episode_label(show.get("title"), hit["season"], ep)
             _playable_episode(label, ep.get("url"),
                               art=_episode_art(show, ep),
-                              info=_episode_info(show, hit["season"], ep))
+                              info=_episode_info(show, hit["season"], ep),
+                              youtube_video_id=ep.get("youtube_video_id"))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def play(episode_url, title):
+def play(episode_url, title, youtube_video_id=None):
     preferred = ADDON.getSettingString("preferred_source") or "Auto"
     preferred = preferred.lower()
-    log("Play requested: %s (preferred source: %s)" % (episode_url, preferred))
+    log("Play requested: %s (preferred source: %s, youtube: %s)"
+        % (episode_url, preferred, bool(youtube_video_id)))
     try:
-        result = resolve_episode(episode_url, preferred_source=preferred)
+        result = resolve_episode(episode_url, preferred_source=preferred,
+                                 youtube_video_id=youtube_video_id or None)
     except ResolverError as exc:
         log("Resolver failed: %s" % exc, xbmc.LOGERROR)
         xbmcgui.Dialog().notification(
@@ -258,6 +265,9 @@ def play(episode_url, title):
             result["video_url"]
             + "|" + "&".join("%s=%s" % kv for kv in headers.items())
         )
+    # stream_type "youtube": video_url is a plugin:// URL for
+    # plugin.video.youtube -- no headers or inputstream needed, Kodi
+    # hands it off directly.
 
     subtitles_lib.attach(item, result.get("subtitles") or [])
 
@@ -270,7 +280,8 @@ def router():
     action = params.get("action")
     debug("Router action=%s" % action)
     if action == "play":
-        play(params["url"], params.get("title", "Episode"))
+        play(params["url"], params.get("title", "Episode"),
+             youtube_video_id=params.get("youtube_video_id") or None)
         return
     catalog, from_cache = catalog_lib.load_catalog()
     debug("Catalog loaded (%d shows, from_cache=%s)"

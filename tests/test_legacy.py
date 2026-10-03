@@ -88,7 +88,7 @@ def test_chain_tries_legacy_after_modern_fails(monkeypatch):
     monkeypatch.setattr(resolver, "_fetch_episode_post",
                         lambda url: (post_html, url))
     # modern source fails
-    def fake_player_source(label, url):
+    def fake_player_source(label, url, session=None):
         raise resolver.ResolverError("upstream broken")
     monkeypatch.setattr(resolver, "resolve_player_source", fake_player_source)
 

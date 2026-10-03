@@ -2,44 +2,28 @@
 
 Public contract:
 
-    resolve_episode(episode_url) -> dict
+    resolve_episode(episode_url, youtube_video_id=None) -> dict
 
 The dict always has this shape:
 
     {
         "video_url":  "<direct stream URL, regenerated on every call>",
-        "stream_type": "hls" | "mp4" | "dash",
+        "stream_type": "hls" | "mp4" | "dash" | "youtube",
         "headers":    {"Referer": ..., "User-Agent": ...},   # only what playback needs
         "subtitles":  [{"lang": "en", "url": "...", "format": "vtt|srt"}, ...],
-        "source":     "<which player tab was used, e.g. 'okru'|'moly'>",
+        "source":     "<which adapter was used>",
     }
 
-How it works (verified 2026-10-02 against
-https://kayifamilytv.com/mehmed-fetihler-sultani-episode-85/):
+Source chain per episode (issue #4):
+  1. every modern source (OK.ru / VidMoly) from the episode's OWN post
+  2. every legacy source from THAT SAME post (wakeupummah/vk/videa)
+  3. approved official fallback: verified broadcaster YouTube video ID
+  4. fail clearly -- never substitute another episode's video
 
-1. Episode page -> the episode's WordPress post ID (postid-NNN in the
-   page) -> post content via the WP REST API. Player iframes are taken
-   ONLY from the episode's own post content, never from the full page
-   HTML: the page template injects "latest videos" player widgets that
-   belong to OTHER episodes, and scanning them caused different episodes
-   to resolve to the same video (issue #3). Identity is validated by
-   matching the API post's canonical link against the final page URL;
-   any mismatch fails closed.
-2. The episode's own player tabs are plain <iframe> embeds, e.g.
-     https://vidmoly.org/embed-<id>.html        ("moLy" tab)
-     https://ok.ru/videoembed/<id>?nochat=1     ("OkRu" tab)
-2. The OK.ru embed page carries a flashVars JSON blob with signed,
-   time-limited CDN URLs on hosts like ok6-4.vkuser.net:
-     - HLS manifest:  .../video.m3u8?cmd=videoPlayerCdn&expires=...&sig=...
-     - progressive MP4 renditions (mobile/lowest/low/sd/hd/full)
-   The signed tokens are bound to the requesting IP and expire, so they
-   are re-resolved live on every Play -- never stored.
-3. English subtitles are burned into the video; no external subtitle
-   files exist, so "subtitles" is [] (handled gracefully by the UI).
-
-Raises ResolverError with a human-readable message on any failure so the
-Kodi UI can fail cleanly. No DRM, paywalls, logins, CAPTCHAs or geo-blocks
-are encountered or bypassed anywhere in this chain.
+Identity scoping (issue #3) is preserved at every step: only the
+episode's own post content is ever inspected. YouTube fallback uses an
+explicit per-episode verified video ID from the catalog -- never a
+search result or a guess.
 """
 
 import http.cookiejar
@@ -48,6 +32,7 @@ import urllib.parse
 import urllib.request
 
 from .logger import log, debug
+from .adapters import kayi_okru, kayi_videa, youtube_official
 
 SITE_BASE = "https://kayifamilytv.com"
 
@@ -105,16 +90,6 @@ class _Session(object):
         except Exception as exc:  # probe failure is not fatal by itself
             debug("probe %s failed: %s" % (url[:100], exc))
             return False
-
-
-def _unescape_url(url):
-    """Undo the JSON string escaping used inside the embed page source."""
-    return (
-        url.replace("\\/", "/")
-        .replace("\\u0026", "&")
-        .replace("\\u003d", "=")
-        .replace("\\u003f", "?")
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -222,80 +197,24 @@ def _sources_from_content(content):
 
 # ---------------------------------------------------------------------------
 # Step 2: player iframe URL -> direct stream URL
+# (implemented in resources/lib/adapters/: kayi_okru, kayi_videa)
 # ---------------------------------------------------------------------------
 
 
-def _resolve_okru(session, iframe_url):
-    """Resolve an OK.ru videoembed page to its signed stream URLs."""
-    import html as html_module
-
-    embed_url = iframe_url
-    if embed_url.startswith("//"):
-        embed_url = "https:" + embed_url
-    final_url, raw_html = session.get_text(embed_url, referer=SITE_BASE + "/")
-    log("Player host: ok.ru (embed %s)" % final_url)
-
-    # The flashVars JSON is HTML-entity-encoded (&quot;) inside a JS string.
-    # Unescape entities first so URL patterns terminate at real quotes.
-    page = html_module.unescape(raw_html).replace("\\/", "/")
-
-    headers = {"Referer": final_url, "User-Agent": USER_AGENT}
-
-    # 1) Preferred: the explicit HLS manifest URL from flashVars.
-    m = re.search(r'"hlsManifestUrl"\s*:\s*"(https?://[^"]+)"', page)
-    if m:
-        hls_url = _unescape_url(m.group(1))
-        log("Stream type detected: HLS (.m3u8)")
-        if session.head_ok(hls_url, referer=final_url):
-            log("HLS manifest reachable (HTTP 200/206 on probe).")
-        else:
-            debug("HLS manifest probe failed; continuing anyway (Kodi will retry)")
-        return hls_url, "hls", headers, []
-
-    # 2) Fallback: progressive MP4 renditions, best quality first.
-    #    OK.ru rendition ids: 4=mobile 0=lowest 1=low 2=sd 3=hd 5=full
-    mp4_by_type = {}
-    for m in re.finditer(
-        r'"name"\s*:\s*"(?:mobile|lowest|low|sd|hd|full)"\s*,\s*'
-        r'"url"\s*:\s*"(https?://[^"]+)"',
-        page,
-    ):
-        url = _unescape_url(m.group(1))
-        t = re.search(r"[?&]type=(\d)", url)
-        if t:
-            mp4_by_type.setdefault(t.group(1), url)
-    for quality in ("5", "3", "2", "1", "0", "4"):
-        if quality in mp4_by_type:
-            log("Stream type detected: progressive MP4 (rendition type=%s)" % quality)
-            return mp4_by_type[quality], "mp4", headers, []
-
-    raise ResolverError(
-        "OK.ru embed page loaded but contained no playable stream URLs."
-    )
-
-
-def _resolve_moly(session, iframe_url):
-    """VidMoly ('moLy' tab) resolver.
-
-    Observed 2026-10-02: VidMoly's own player fails in a normal browser
-    with JW Player Error 232011 ("This video file cannot be played") on
-    both Episode 84 and 85 embeds -- the media is broken upstream, not a
-    parsing problem. Nothing is bypassed here; the failure is reported.
-    """
-    raise ResolverError(
-        "The 'moLy' (VidMoly) source is currently not playable: its own "
-        "player reports the video file cannot be played (upstream media "
-        "error). Try the 'OkRu' source instead."
-    )
-
-
-def resolve_player_source(label, iframe_url):
+def resolve_player_source(label, iframe_url, session=None):
     """Resolve one player tab to (video_url, stream_type, headers, subtitles)."""
-    session = _Session()
+    session = session or _Session()
     if label == "okru":
-        return _resolve_okru(session, iframe_url)
+        try:
+            return kayi_okru.resolve(iframe_url, session)
+        except kayi_okru.OkruAdapterError as exc:
+            raise ResolverError(str(exc))
     if label == "moly":
-        return _resolve_moly(session, iframe_url)
+        raise ResolverError(
+            "The 'moLy' (VidMoly) source is currently not playable: its own "
+            "player reports the video file cannot be played (upstream media "
+            "error). Try the 'OkRu' source instead."
+        )
     raise ResolverError("Unknown player source '%s'." % label)
 
 
@@ -307,17 +226,18 @@ def resolve_player_source(label, iframe_url):
 _SOURCE_PRIORITY = ("okru", "moly")
 
 
-def resolve_episode(episode_url, preferred_source="auto"):
+def resolve_episode(episode_url, preferred_source="auto", youtube_video_id=None):
     """Resolve a public KayiFamily episode page to a playable stream dict.
 
     Source chain per episode (issue #4):
       1. every modern source (OK.ru / VidMoly) from the episode's OWN post
       2. every legacy source from THAT SAME post (wakeupummah/vk/videa)
-      3. approved alternate adapters, if any are configured
+      3. approved official fallback: verified broadcaster YouTube video ID
       4. fail clearly -- never substitute another episode's video
 
     Identity scoping (issue #3) is preserved at every step: only the
-    episode's own post content is ever inspected.
+    episode's own post content is ever inspected. The YouTube fallback
+    uses an explicit per-episode verified video ID -- never a search.
     """
     # deferred to avoid a circular import (legacy imports ResolverError)
     from .legacy import detect_legacy_players, resolve_legacy
@@ -344,7 +264,7 @@ def resolve_episode(episode_url, preferred_source="auto"):
     for label, iframe_url in ordered:
         try:
             video_url, stream_type, headers, subtitles = resolve_player_source(
-                label, iframe_url
+                label, iframe_url, session
             )
             log("Resolved via '%s': %s" % (label, stream_type))
             debug("video_url: %s..." % video_url[:90])
@@ -372,9 +292,20 @@ def resolve_episode(episode_url, preferred_source="auto"):
             errors.append("legacy-%s: %s" % (player_type, exc))
             debug("Legacy '%s' failed: %s" % (player_type, exc))
 
-    # Approved alternate adapters would be tried here (none configured).
+    # Approved official fallback: verified broadcaster YouTube video.
+    # The ID comes from the catalog (explicit per-episode mapping) --
+    # never from a search or a guess.
+    if youtube_video_id:
+        try:
+            result = youtube_official.resolve_episode_source(
+                youtube_video_id, episode_label=episode_url)
+            log("Resolved via YouTube official fallback: %s" % youtube_video_id)
+            return result
+        except youtube_official.YouTubeAdapterError as exc:
+            errors.append("youtube: %s" % exc)
+            debug("YouTube fallback failed: %s" % exc)
 
-    if not sources and not legacy:
+    if not sources and not legacy and not youtube_video_id:
         raise ResolverError("No video player found on the episode page.")
     raise ResolverError(
         "Could not resolve a playable stream. Tried: %s" % "; ".join(errors)

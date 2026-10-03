@@ -58,6 +58,33 @@ _LEGACY_RE = re.compile(
     r"vk\.com/video_ext\.php|videa\.hu/player", re.IGNORECASE)
 
 
+# Verified official YouTube video IDs (TRT1/ATV), keyed by show slug.
+# Built 2026-10-03 from the official broadcaster YouTube playlists:
+#   Mehmed:     https://youtube.com/playlist?list=PLBCIUmhQ_R1JBaK-RfI6ScRr8RbFJuBjF
+#   Salahuddin: https://www.youtube.com/playlist?list=PLSsXHcn6qZb5nnCnsIuNMjXMHcUAJKQcJ
+#   Orhan:      official @atvturkiye uploads (individual, title-verified)
+# Every ID was verified: official channel, correct show, correct episode
+# number, full-episode duration. Stored in tools/youtube_mappings.json.
+YOUTUBE_MAPPINGS_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "youtube_mappings.json")
+
+
+def load_youtube_mappings():
+    try:
+        with open(YOUTUBE_MAPPINGS_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+# show slug -> key in youtube_mappings.json
+YOUTUBE_SHOW_KEYS = {
+    "mehmed-fetihler-sultani": "mehmed",
+    "kurulus-orhan": "orhan",
+    "salahuddin-ayyubi": "salahuddin",
+}
+
+
 def detect_player_type(post_content):
     """Return modern/legacy/none for the episode's own post content."""
     srcs = _IFRAME_RE.findall(post_content or "")
@@ -308,6 +335,7 @@ def build():
 
     catalog_shows = []
     latest = []
+    youtube_mappings = load_youtube_mappings()
     for show, season_objs in shows:
         sid = show_id_from_slug(show["slug"])
         stitle = clean_show_title(show["name"])
@@ -323,6 +351,13 @@ def build():
                 # playback capability is separate from catalog existence
                 e["player"] = detect_player_type(
                     (p.get("content") or {}).get("rendered"))
+                # verified official YouTube fallback (explicit per-episode mapping)
+                yt_key = YOUTUBE_SHOW_KEYS.get(sid)
+                yt_id = None
+                if yt_key:
+                    yt_id = (youtube_mappings.get(yt_key) or {}).get(
+                        str(e["number"]))
+                e["youtube_video_id"] = yt_id
                 eps.append(e)
                 full = dict(e)
                 full.update({"show_id": sid, "show_title": stitle,
