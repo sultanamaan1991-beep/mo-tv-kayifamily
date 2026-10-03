@@ -25,8 +25,17 @@ from datetime import datetime, timezone
 
 API = "https://kayifamilytv.com/wp-json/wp/v2"
 SHOWS_PARENT = 7          # HISTORICAL TV SHOWS (English)
-DOCS_CATEGORY = 54        # Documentaries
+DOCS_CATEGORY = 54        # Documentaries (hidden in Phase 1)
 OUT = "docs/catalog.json"
+
+# Issue #4: Phase 1 is locked to exactly these 3 shows. Category ids from
+# the public WP REST API. Everything else is hidden from the user-facing
+# catalog until Phase 1 is reviewed and accepted.
+PHASE1_SHOWS = {
+    478: {"seasons": {1: (1, 15), 2: (16, 49), 3: (50, 83), 4: (84, 86)}},  # Mehmed
+    494: {"seasons": {1: (1, 26)}},          # Kurulus Orhan
+    475: {"seasons": {1: (1, 28), 2: (29, 58)}},  # Salahuddin Ayyubi
+}
 
 # Category slugs containing any of these are non-English duplicates.
 EXCLUDE_HINTS = ("espanol", "español", "portugues", "português")
@@ -35,13 +44,28 @@ EPISODE_RE = re.compile(r"-episode-(\d+)", re.IGNORECASE)
 SEASON_RE = re.compile(r"season\s*(\d+)", re.IGNORECASE)
 SKIP_TITLE_RE = re.compile(r"trailer|promo|teaser|\bost\b|news|recap", re.IGNORECASE)
 
-# Mirrors resolver.py's player detection exactly: an episode is listed only
-# if its page carries an ok.ru or vidmoly player iframe the frozen resolver
-# can actually play. Legacy-layout pages (wakeupummah/vkvideo/etc.) are
-# skipped; they reappear automatically once the site migrates them.
+# Issue #4: catalog completeness is SEPARATE from playback support.
+# Every real episode is listed; the `player` field records what the
+# episode's own post carries so the UI can play or fail clearly:
+#   "modern" -- OK.ru / VidMoly iframe (playable today)
+#   "legacy" -- wakeupummah / vkvideo / videa iframe (not yet supported)
+#   "none"   -- no recognized player iframe in the episode's own post
 _IFRAME_RE = re.compile(r'<iframe[^>]+src="([^"]+)"', re.IGNORECASE)
 _OKRU_RE = re.compile(r"(?:https?:)?//ok\.ru/videoembed/(\d+)", re.IGNORECASE)
-_MOLY_RE = re.compile(r"https?://vidmoly\.org/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
+_MOLY_RE = re.compile(r"https?://vidmoly\.(?:org|biz|net)/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
+_LEGACY_RE = re.compile(
+    r"wakeupummah\.com/fireplayer/|vkvideo\.ru/video_ext\.php|"
+    r"vk\.com/video_ext\.php|videa\.hu/player", re.IGNORECASE)
+
+
+def detect_player_type(post_content):
+    """Return modern/legacy/none for the episode's own post content."""
+    srcs = _IFRAME_RE.findall(post_content or "")
+    if any(_OKRU_RE.search(s) or _MOLY_RE.search(s) for s in srcs):
+        return "modern"
+    if any(_LEGACY_RE.search(s) for s in srcs):
+        return "legacy"
+    return "none"
 _HLS_RE = re.compile(r'"hlsManifestUrl"\s*:\s*"(https?://[^"]+)"')
 _MP4_RE = re.compile(
     r'"name"\s*:\s*"(?:mobile|lowest|low|sd|hd|full)"\s*,\s*'
@@ -224,49 +248,52 @@ def build():
     all_media_ids = []
     season_posts = {}  # season_cat_id -> posts
 
-    show_cats = [c for c in categories
-                 if c["parent"] == SHOWS_PARENT and is_english_show(c)]
-    show_cats.sort(key=lambda c: clean_show_title(c["name"]))
+    # Issue #4: Phase 1 allowlist -- exactly these 3 shows, nothing else.
+    show_cats = [by_id[cid] for cid in PHASE1_SHOWS if cid in by_id]
+
+    def season_for_episode(show_id, ep_num):
+        """Map an episode number to its season via the Phase 1 ranges."""
+        for season_no, (lo, hi) in PHASE1_SHOWS[show_id]["seasons"].items():
+            if lo <= ep_num <= hi:
+                return season_no
+        return None
+
+    POST_FIELDS = ("id,date,modified,slug,link,title,featured_media,content")
 
     for show in show_cats:
-        seasons = [c for c in categories if c["parent"] == show["id"]]
-        season_objs = []
-        for season in seasons:
-            m = SEASON_RE.search(season["name"] or "")
-            if not m:
+        show_id = show["id"]
+        seasons = [c for c in categories if c["parent"] == show_id
+                   and SEASON_RE.search(c["name"] or "")]
+        # Fetch season-category posts AND show-direct posts; dedupe by id.
+        # (The site lists some episodes in both, e.g. Mehmed S3; S4 has no
+        # season category so its episodes are only show-direct.)
+        seen_ids = set()
+        all_posts = []
+        for cat_id in [c["id"] for c in seasons] + [show_id]:
+            for p in api_get_all("/posts", {
+                    "categories": cat_id, "_fields": POST_FIELDS}):
+                if p["id"] not in seen_ids:
+                    seen_ids.add(p["id"])
+                    all_posts.append(p)
+        by_season = {}
+        for p in all_posts:
+            num = episode_number(p)
+            sno = season_for_episode(show_id, num) if num else None
+            if sno is None:
                 continue
-            posts = api_get_all("/posts", {
-                "categories": season["id"],
-                "_fields": "id,date,modified,slug,link,title,featured_media,content",
-            })
-            season_posts[season["id"]] = posts
+            by_season.setdefault(sno, []).append(p)
+        season_objs = []
+        for sno in sorted(by_season):
+            posts = by_season[sno]
+            season_posts[(show_id, sno)] = posts
             all_media_ids.extend(p.get("featured_media") for p in posts)
-            season_objs.append((int(m.group(1)), season, posts))
-        if not season_objs:
-            # No season sub-categories: episodes live directly in the show
-            # category (e.g. Destan, Hayreddin). Treat as Season 1.
-            posts = api_get_all("/posts", {
-                "categories": show["id"],
-                "_fields": "id,date,modified,slug,link,title,featured_media,content",
-            })
-            season_posts[show["id"]] = posts
-            all_media_ids.extend(p.get("featured_media") for p in posts)
-            season_objs.append((1, show, posts))
+            # season label: prefer the WP season category name if present
+            season_objs.append((sno, show, posts))
         shows.append((show, sorted(season_objs)))
 
-    # documentaries (flat)
-    doc_posts = api_get_all("/posts", {
-        "categories": DOCS_CATEGORY,
-        "_fields": "id,date,modified,slug,link,title,featured_media,content",
-    })
-    all_media_ids.extend(p.get("featured_media") for p in doc_posts)
-
+    # Phase 1: documentaries hidden from the user-facing catalog.
+    doc_posts = []
     media = fetch_media(all_media_ids)
-
-    all_posts = ([p for posts in season_posts.values() for p in posts]
-                 + doc_posts)
-    playable = resolve_playability(all_posts)
-    n_skipped = sum(1 for p in all_posts if not playable.get(p["id"], False))
 
     def ep_obj(post):
         num = episode_number(post)
@@ -288,13 +315,14 @@ def build():
         for season_no, season, posts in season_objs:
             eps = []
             for p in posts:
-                if not playable.get(p["id"], False):
-                    continue
                 if SKIP_TITLE_RE.search(strip_tags(p.get("title", {}).get("rendered"))):
                     continue
                 e = ep_obj(p)
                 if e["number"] is None or not e["url"]:
                     continue
+                # playback capability is separate from catalog existence
+                e["player"] = detect_player_type(
+                    (p.get("content") or {}).get("rendered"))
                 eps.append(e)
                 full = dict(e)
                 full.update({"show_id": sid, "show_title": stitle,
@@ -321,13 +349,7 @@ def build():
     latest.sort(key=lambda e: e["published"], reverse=True)
     latest = latest[:30]
 
-    docs = []
-    for p in doc_posts:
-        if not playable.get(p["id"], False):
-            continue
-        e = ep_obj(p)
-        if e["url"]:
-            docs.append(e)
+    docs = []  # Phase 1: hidden
 
     catalog = {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -336,12 +358,20 @@ def build():
         "documentaries": docs,
         "latest": latest,
     }
-    return catalog, n_skipped
+    # completeness stats by player type (issue #4)
+    player_counts = {}
+    for show in catalog_shows:
+        for se in show["seasons"]:
+            for e in se["episodes"]:
+                player_counts[e.get("player", "none")] = (
+                    player_counts.get(e.get("player", "none"), 0) + 1)
+    catalog["player_counts"] = player_counts
+    return catalog
 
 
 def main():
     out = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "--out" else OUT
-    catalog, n_skipped = build()
+    catalog = build()
     new_body = {k: v for k, v in catalog.items() if k != "generated"}
     changed = True
     try:
@@ -360,8 +390,9 @@ def main():
     n_shows = len(catalog["shows"])
     n_seasons = sum(len(s["seasons"]) for s in catalog["shows"])
     n_eps = sum(len(se["episodes"]) for s in catalog["shows"] for se in s["seasons"])
-    print("shows=%d seasons=%d episodes=%d skipped_legacy=%d documentaries=%d latest=%d -> %s"
-          % (n_shows, n_seasons, n_eps, n_skipped, len(catalog["documentaries"]),
+    print("shows=%d seasons=%d episodes=%d players=%s documentaries=%d latest=%d -> %s"
+          % (n_shows, n_seasons, n_eps, catalog.get("player_counts"),
+             len(catalog["documentaries"]),
              len(catalog["latest"]), "CHANGED" if changed else "UNCHANGED"))
 
 

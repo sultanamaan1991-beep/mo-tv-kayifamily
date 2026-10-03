@@ -1,175 +1,7 @@
 {
- "generated": "2026-10-03T10:21:40+00:00",
+ "generated": "2026-10-03T11:03:21+00:00",
  "source": "https://kayifamilytv.com/wp-json/wp/v2",
  "shows": [
-  {
-   "id": "haci-bayram-veli",
-   "title": "Haci Bayram Veli",
-   "description": "",
-   "poster": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-1-1-400x240.jpg",
-   "fanart": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-1-1-400x240.jpg",
-   "seasons": [
-    {
-     "number": 1,
-     "episodes": [
-      {
-       "number": 1,
-       "title": "HACI BAYRAM VELI EPISODE 1",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-1/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-1-1-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 2,
-       "title": "HACI BAYRAM VELI EPISODE 2",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-2/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-2-1-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 3,
-       "title": "HACI BAYRAM VELI EPISODE 3",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-3/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-3-1-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 4,
-       "title": "HACI BAYRAM VELI EPISODE 4",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-4/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-4-ENGLISH-SUBTITLES-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 5,
-       "title": "HACI BAYRAM VELI EPISODE 5",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-5/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-5-1-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 6,
-       "title": "HACI BAYRAM VELI EPISODE 6",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-6/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-6-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 7,
-       "title": "HACI BAYRAM VELI EPISODE 7",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-7/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-7-400x240.jpg",
-       "published": "2022-05-13"
-      },
-      {
-       "number": 8,
-       "title": "HACI BAYRAM VELI EPISODE 8",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-8/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-8-400x240.jpg",
-       "published": "2022-05-14"
-      },
-      {
-       "number": 9,
-       "title": "HACI BAYRAM VELI EPISODE 9",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-9/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-9-400x240.jpg",
-       "published": "2022-05-14"
-      },
-      {
-       "number": 10,
-       "title": "HACI BAYRAM VELI EPISODE 10",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-10/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-10-400x240.jpg",
-       "published": "2022-05-14"
-      },
-      {
-       "number": 11,
-       "title": "HACI BAYRAM VELI EPISODE 11",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-11/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-11-400x240.jpg",
-       "published": "2022-05-15"
-      },
-      {
-       "number": 12,
-       "title": "HACI BAYRAM VELI EPISODE 12",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-12/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-12-400x240.jpg",
-       "published": "2022-05-15"
-      },
-      {
-       "number": 14,
-       "title": "HACI BAYRAM VELI EPISODE 14",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-14/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-14-400x240.jpg",
-       "published": "2022-06-16"
-      },
-      {
-       "number": 15,
-       "title": "HACI BAYRAM VELI EPISODE 15",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-15/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-15-400x240.jpg",
-       "published": "2022-06-30"
-      },
-      {
-       "number": 16,
-       "title": "HACI BAYRAM VELI EPISODE 16",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-16/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-16-400x240.jpg",
-       "published": "2022-07-08"
-      },
-      {
-       "number": 17,
-       "title": "HACI BAYRAM VELI EPISODE 17",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-17/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-17-400x240.jpg",
-       "published": "2022-07-20"
-      },
-      {
-       "number": 19,
-       "title": "HACI BAYRAM VELI EPISODE 19",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-19/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-19-400x240.jpg",
-       "published": "2022-08-23"
-      },
-      {
-       "number": 20,
-       "title": "HACI BAYRAM VELI EPISODE 20",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-20/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-20-400x240.jpg",
-       "published": "2022-09-16"
-      },
-      {
-       "number": 22,
-       "title": "HACI BAYRAM VELI EPISODE 22",
-       "url": "https://kayifamilytv.com/haci-bayram-veli-episode-22/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/HACI-BAYRAM-VELi-EPISODE-22-400x240.jpg",
-       "published": "2022-12-07"
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "kurulus-orhan",
-   "title": "Kurulus Orhan",
-   "description": "Watch Kurulus Orhan with English Subtitles for Free. Watch Kurulus Osman Season 7 with English Subtitles",
-   "poster": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
-   "fanart": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
-   "seasons": [
-    {
-     "number": 1,
-     "episodes": [
-      {
-       "number": 26,
-       "title": "Kurulus Orhan Episode 26",
-       "url": "https://kayifamilytv.com/kurulus-orhan-episode-26/",
-       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
-       "published": "2026-06-15"
-      }
-     ]
-    }
-   ]
-  },
   {
    "id": "mehmed-fetihler-sultani",
    "title": "Mehmed Fetihler Sultani",
@@ -178,6 +10,408 @@
    "fanart": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-84-400x232.jpg",
    "seasons": [
     {
+     "number": 1,
+     "episodes": [
+      {
+       "number": 1,
+       "title": "Mehmed Fetihler Sultani Episode 1",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-1/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-1-400x240.jpg",
+       "published": "2024-02-27",
+       "player": "legacy"
+      },
+      {
+       "number": 2,
+       "title": "Mehmed Fetihler Sultani Episode 2",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-2-english-subtitles/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-2-400x234.jpg",
+       "published": "2024-03-05",
+       "player": "legacy"
+      },
+      {
+       "number": 3,
+       "title": "Mehmed Fetihler Sultani Episode 3",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-3-english/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-3-400x234.jpg",
+       "published": "2024-03-12",
+       "player": "legacy"
+      },
+      {
+       "number": 4,
+       "title": "Mehmed Fetihler Sultani Episode 4",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-4-english/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-4-400x234.jpg",
+       "published": "2024-03-19",
+       "player": "legacy"
+      },
+      {
+       "number": 5,
+       "title": "Mehmed Fetihler Sultani Episode 5",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-5/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-5-400x234.jpg",
+       "published": "2024-03-27",
+       "player": "legacy"
+      },
+      {
+       "number": 6,
+       "title": "Mehmed Fetihler Sultani Episode 6",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-6/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-6-400x234.jpg",
+       "published": "2024-04-03",
+       "player": "legacy"
+      },
+      {
+       "number": 7,
+       "title": "Mehmed Fetihler Sultani Episode 7",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-7/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-7-400x234.jpg",
+       "published": "2024-04-16",
+       "player": "legacy"
+      },
+      {
+       "number": 8,
+       "title": "Mehmed Fetihler Sultani Episode 8",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-8/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-8-400x234.jpg",
+       "published": "2024-04-24",
+       "player": "legacy"
+      },
+      {
+       "number": 9,
+       "title": "Mehmed Fetihler Sultani Episode 9",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-9/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-9-400x234.jpg",
+       "published": "2024-05-01",
+       "player": "legacy"
+      },
+      {
+       "number": 10,
+       "title": "Mehmed Fetihler Sultani Episode 10",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-10/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-10-400x234.jpg",
+       "published": "2024-05-08",
+       "player": "legacy"
+      },
+      {
+       "number": 11,
+       "title": "Mehmed Fetihler Sultani Episode 11",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-11/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-11-400x234.jpg",
+       "published": "2024-05-15",
+       "player": "legacy"
+      },
+      {
+       "number": 12,
+       "title": "Mehmed Fetihler Sultani Episode 12",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-12/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-12-400x234.jpg",
+       "published": "2024-05-22",
+       "player": "legacy"
+      },
+      {
+       "number": 13,
+       "title": "Mehmed Fetihler Sultani Episode 13",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-13/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-13-400x234.jpg",
+       "published": "2024-05-29",
+       "player": "legacy"
+      },
+      {
+       "number": 14,
+       "title": "Mehmed Fetihler Sultani Episode 14",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-14/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-14-400x234.jpg",
+       "published": "2024-06-05",
+       "player": "legacy"
+      },
+      {
+       "number": 15,
+       "title": "Mehmed Fetihler Sultani Episode 15",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-15/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-15-400x234.jpg",
+       "published": "2024-06-12",
+       "player": "legacy"
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "episodes": [
+      {
+       "number": 16,
+       "title": "Mehmed Fetihler Sultani Episode 16",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-16/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-16-1-400x234.jpg",
+       "published": "2024-09-25",
+       "player": "legacy"
+      },
+      {
+       "number": 17,
+       "title": "Mehmed Fetihler Sultani Episode 17",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-17/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-17-400x234.jpg",
+       "published": "2024-10-02",
+       "player": "legacy"
+      },
+      {
+       "number": 18,
+       "title": "Mehmed Fetihler Sultani Episode 18",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-18/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-18-400x234.jpg",
+       "published": "2024-10-09",
+       "player": "legacy"
+      },
+      {
+       "number": 19,
+       "title": "Mehmed Fetihler Sultani Episode 19",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-19/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-19-400x234.jpg",
+       "published": "2024-10-16",
+       "player": "legacy"
+      },
+      {
+       "number": 20,
+       "title": "Mehmed Fetihler Sultani Episode 20",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-20/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-20-400x234.jpg",
+       "published": "2024-10-23",
+       "player": "legacy"
+      },
+      {
+       "number": 21,
+       "title": "Mehmed Fetihler Sultani Episode 21",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-21/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-21-400x234.jpg",
+       "published": "2024-10-30",
+       "player": "legacy"
+      },
+      {
+       "number": 22,
+       "title": "Mehmed Fetihler Sultani Episode 22",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-22/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-22-400x234.jpg",
+       "published": "2024-11-06",
+       "player": "legacy"
+      },
+      {
+       "number": 23,
+       "title": "Mehmed Fetihler Sultani Episode 23",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-23/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-23-400x234.jpg",
+       "published": "2024-11-13",
+       "player": "legacy"
+      },
+      {
+       "number": 24,
+       "title": "Mehmed Fetihler Sultani Episode 24",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-24/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-24-400x234.jpg",
+       "published": "2024-11-20",
+       "player": "legacy"
+      },
+      {
+       "number": 25,
+       "title": "Mehmed Fetihler Sultani Episode 25",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-25/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-25-400x234.jpg",
+       "published": "2024-11-27",
+       "player": "legacy"
+      },
+      {
+       "number": 26,
+       "title": "Mehmed Fetihler Sultani Episode 26",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-26/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-26-400x234.jpg",
+       "published": "2024-12-04",
+       "player": "legacy"
+      },
+      {
+       "number": 27,
+       "title": "Mehmed Fetihler Sultani Episode 27",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-27/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-27-400x234.jpg",
+       "published": "2024-12-11",
+       "player": "legacy"
+      },
+      {
+       "number": 28,
+       "title": "Mehmed Fetihler Sultani Episode 28",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-28/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-28-400x234.jpg",
+       "published": "2024-12-18",
+       "player": "legacy"
+      },
+      {
+       "number": 29,
+       "title": "Mehmed Fetihler Sultani Episode 29",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-29/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-29-400x234.jpg",
+       "published": "2024-12-25",
+       "player": "legacy"
+      },
+      {
+       "number": 30,
+       "title": "Mehmed Fetihler Sultani Episode 30",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-30/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-30-400x234.jpg",
+       "published": "2025-01-08",
+       "player": "legacy"
+      },
+      {
+       "number": 31,
+       "title": "Mehmed Fetihler Sultani Episode 31",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-31/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-31-400x234.jpg",
+       "published": "2025-01-14",
+       "player": "legacy"
+      },
+      {
+       "number": 32,
+       "title": "Mehmed Fetihler Sultani Episode 32",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-32/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-32-400x234.jpg",
+       "published": "2025-01-29",
+       "player": "legacy"
+      },
+      {
+       "number": 33,
+       "title": "Mehmed Fetihler Sultani Episode 33",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-33/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-33-400x234.jpg",
+       "published": "2025-02-05",
+       "player": "legacy"
+      },
+      {
+       "number": 34,
+       "title": "Mehmed Fetihler Sultani Episode 34",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-34/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-34-400x234.jpg",
+       "published": "2025-02-12",
+       "player": "legacy"
+      },
+      {
+       "number": 35,
+       "title": "Mehmed Fetihler Sultani Episode 35",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-35/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-35-400x234.jpg",
+       "published": "2025-02-19",
+       "player": "legacy"
+      },
+      {
+       "number": 36,
+       "title": "Mehmed Fetihler Sultani Episode 36",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-36/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-36-400x234.jpg",
+       "published": "2025-02-26",
+       "player": "legacy"
+      },
+      {
+       "number": 37,
+       "title": "Mehmed Fetihler Sultani Episode 37",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-37/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-37-400x234.jpg",
+       "published": "2025-03-05",
+       "player": "legacy"
+      },
+      {
+       "number": 38,
+       "title": "Mehmed Fetihler Sultani Episode 38",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-38/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-38-400x234.jpg",
+       "published": "2025-03-12",
+       "player": "legacy"
+      },
+      {
+       "number": 39,
+       "title": "Mehmed Fetihler Sultani Episode 39",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-39/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-39-400x234.jpg",
+       "published": "2025-03-19",
+       "player": "legacy"
+      },
+      {
+       "number": 40,
+       "title": "Mehmed Fetihler Sultani Episode 40",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-40/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-40-400x234.jpg",
+       "published": "2025-03-26",
+       "player": "legacy"
+      },
+      {
+       "number": 41,
+       "title": "Mehmed Fetihler Sultani Episode 41",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-41/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-41-400x234.jpg",
+       "published": "2025-04-09",
+       "player": "legacy"
+      },
+      {
+       "number": 42,
+       "title": "Mehmed Fetihler Sultani Episode 42",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-42/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-42-400x234.jpg",
+       "published": "2025-04-16",
+       "player": "legacy"
+      },
+      {
+       "number": 43,
+       "title": "Mehmed Fetihler Sultani Episode 43",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-43/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-43-400x234.jpg",
+       "published": "2025-04-23",
+       "player": "legacy"
+      },
+      {
+       "number": 44,
+       "title": "Mehmed Fetihler Sultani Episode 44",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-44/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-44-400x234.jpg",
+       "published": "2025-04-30",
+       "player": "legacy"
+      },
+      {
+       "number": 45,
+       "title": "Mehmed Fetihler Sultani Episode 45",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-45/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-45-400x234.jpg",
+       "published": "2025-05-14",
+       "player": "legacy"
+      },
+      {
+       "number": 46,
+       "title": "Mehmed Fetihler Sultani Episode 46",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-46/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-46-400x234.jpg",
+       "published": "2025-05-21",
+       "player": "legacy"
+      },
+      {
+       "number": 47,
+       "title": "Mehmed Fetihler Sultani Episode 47",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-47/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-47-400x234.jpg",
+       "published": "2025-05-28",
+       "player": "legacy"
+      },
+      {
+       "number": 48,
+       "title": "Mehmed Fetihler Sultani Episode 48",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-48/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-48-400x234.jpg",
+       "published": "2025-06-04",
+       "player": "legacy"
+      },
+      {
+       "number": 49,
+       "title": "Mehmed Fetihler Sultani Episode 49",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-49/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-49-400x234.jpg",
+       "published": "2025-06-11",
+       "player": "legacy"
+      }
+     ]
+    },
+    {
      "number": 3,
      "episodes": [
       {
@@ -185,231 +419,272 @@
        "title": "Mehmed Fetihler Sultani Episode 50",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-50/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Season-3-Trailer-400x234.jpg",
-       "published": "2025-09-23"
+       "published": "2025-09-23",
+       "player": "modern"
       },
       {
        "number": 51,
        "title": "Mehmed Fetihler Sultani Episode 51",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-51/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-51-400x234.jpg",
-       "published": "2025-09-29"
+       "published": "2025-09-29",
+       "player": "modern"
       },
       {
        "number": 52,
        "title": "Mehmed Fetihler Sultani Episode 52",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-52/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-52-400x234.jpg",
-       "published": "2025-10-06"
+       "published": "2025-10-06",
+       "player": "modern"
       },
       {
        "number": 53,
        "title": "Mehmed Fetihler Sultani Episode 53",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-53/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-53-400x234.jpg",
-       "published": "2025-10-13"
+       "published": "2025-10-13",
+       "player": "modern"
       },
       {
        "number": 54,
        "title": "Mehmed Fetihler Sultani Episode 54",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-54/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-54-400x234.jpg",
-       "published": "2025-10-19"
+       "published": "2025-10-19",
+       "player": "modern"
       },
       {
        "number": 55,
        "title": "Mehmed Fetihler Sultani Episode 55",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-55/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-55-400x234.jpg",
-       "published": "2025-10-27"
+       "published": "2025-10-27",
+       "player": "modern"
       },
       {
        "number": 56,
        "title": "Mehmed Fetihler Sultani Episode 56",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-56/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-56-400x234.jpg",
-       "published": "2025-11-03"
+       "published": "2025-11-03",
+       "player": "modern"
       },
       {
        "number": 57,
        "title": "Mehmed Fetihler Sultani Episode 57",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-57/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-57-400x234.jpg",
-       "published": "2025-11-10"
+       "published": "2025-11-10",
+       "player": "modern"
       },
       {
        "number": 58,
        "title": "Mehmed Fetihler Sultani Episode 58",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-58/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-58-400x234.jpg",
-       "published": "2025-11-18"
+       "published": "2025-11-18",
+       "player": "modern"
       },
       {
        "number": 59,
        "title": "Mehmed Fetihler Sultani Episode 59",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-59/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-59-400x225.jpg",
-       "published": "2025-11-24"
+       "published": "2025-11-24",
+       "player": "modern"
       },
       {
        "number": 60,
        "title": "Mehmed Fetihler Sultani Episode 60",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-60/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-60-400x234.jpg",
-       "published": "2025-12-08"
+       "published": "2025-12-08",
+       "player": "modern"
       },
       {
        "number": 61,
        "title": "Mehmed Fetihler Sultani Episode 61",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-61/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-61-400x234.jpg",
-       "published": "2025-12-15"
+       "published": "2025-12-15",
+       "player": "modern"
       },
       {
        "number": 62,
        "title": "Mehmed Fetihler Sultani Episode 62",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-62/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-62-400x234.jpg",
-       "published": "2025-12-22"
+       "published": "2025-12-22",
+       "player": "modern"
       },
       {
        "number": 63,
        "title": "Mehmed Fetihler Sultani Episode 63",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-63/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-63-400x234.jpg",
-       "published": "2026-01-05"
+       "published": "2026-01-05",
+       "player": "modern"
       },
       {
        "number": 64,
        "title": "Mehmed Fetihler Sultani Episode 64",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-64/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-64-400x234.jpg",
-       "published": "2026-01-12"
+       "published": "2026-01-12",
+       "player": "modern"
       },
       {
        "number": 65,
        "title": "Mehmed Fetihler Sultani Episode 65",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-65/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-65-400x234.jpg",
-       "published": "2026-01-19"
+       "published": "2026-01-19",
+       "player": "modern"
       },
       {
        "number": 66,
        "title": "Mehmed Fetihler Sultani Episode 66",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-66/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-66-400x234.jpg",
-       "published": "2026-01-26"
+       "published": "2026-01-26",
+       "player": "modern"
       },
       {
        "number": 67,
        "title": "Mehmed Fetihler Sultani Episode 67",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-67/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-67-400x234.jpg",
-       "published": "2026-02-02"
+       "published": "2026-02-02",
+       "player": "modern"
       },
       {
        "number": 68,
        "title": "Mehmed Fetihler Sultani Episode 68",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-68/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-68-400x234.jpg",
-       "published": "2026-02-09"
+       "published": "2026-02-09",
+       "player": "modern"
       },
       {
        "number": 69,
        "title": "Mehmed Fetihler Sultani Episode 69",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-69/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-69-400x234.jpg",
-       "published": "2026-02-16"
+       "published": "2026-02-16",
+       "player": "modern"
       },
       {
        "number": 70,
        "title": "Mehmed Fetihler Sultani Episode 70",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-70/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-70-400x234.jpg",
-       "published": "2026-03-02"
+       "published": "2026-03-02",
+       "player": "modern"
       },
       {
        "number": 71,
        "title": "Mehmed Fetihler Sultani Episode 71",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-71/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-71-400x234.jpg",
-       "published": "2026-03-09"
+       "published": "2026-03-09",
+       "player": "modern"
       },
       {
        "number": 72,
        "title": "Mehmed Fetihler Sultani Episode 72",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-72/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-72-400x234.jpg",
-       "published": "2026-03-23"
+       "published": "2026-03-23",
+       "player": "modern"
       },
       {
        "number": 73,
        "title": "Mehmed Fetihler Sultani Episode 73",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-73/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-73-400x234.jpg",
-       "published": "2026-03-30"
+       "published": "2026-03-30",
+       "player": "modern"
       },
       {
        "number": 74,
        "title": "Mehmed Fetihler Sultani Episode 74",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-74/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-74-400x234.jpg",
-       "published": "2026-04-06"
+       "published": "2026-04-06",
+       "player": "modern"
       },
       {
        "number": 75,
        "title": "Mehmed Fetihler Sultani Episode 75",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-75/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-75-400x234.jpg",
-       "published": "2026-04-14"
+       "published": "2026-04-14",
+       "player": "modern"
       },
       {
        "number": 76,
        "title": "Mehmed Fetihler Sultani Episode 76",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-76/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-76-400x234.jpg",
-       "published": "2026-04-20"
+       "published": "2026-04-20",
+       "player": "modern"
       },
       {
        "number": 77,
        "title": "Mehmed Fetihler Sultani Episode 77",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-77/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Episode-77-400x234.jpg",
-       "published": "2026-04-27"
+       "published": "2026-04-27",
+       "player": "modern"
       },
       {
        "number": 78,
        "title": "Mehmed Fetihler Sultani Episode 78",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-78/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-78-400x234.jpg",
-       "published": "2026-05-05"
+       "published": "2026-05-05",
+       "player": "modern"
       },
       {
        "number": 79,
        "title": "Mehmed Fetihler Sultani Episode 79",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-79/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-79-400x234.jpg",
-       "published": "2026-05-12"
+       "published": "2026-05-12",
+       "player": "modern"
       },
       {
        "number": 80,
        "title": "Mehmed Fetihler Sultani Episode 80",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-80/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-80-400x234.jpg",
-       "published": "2026-05-19"
+       "published": "2026-05-19",
+       "player": "modern"
       },
       {
        "number": 81,
        "title": "Mehmed Fetihler Sultani Episode 81",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-81/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-81-400x234.jpg",
-       "published": "2026-05-29"
+       "published": "2026-05-29",
+       "player": "modern"
+      },
+      {
+       "number": 82,
+       "title": "Mehmed Fetihler Sultani Episode 82",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-82/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-82-400x234.jpg",
+       "published": "2026-06-08",
+       "player": "modern"
       },
       {
        "number": 83,
        "title": "Mehmed Fetihler Sultani Episode 83",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-83/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-83-400x234.jpg",
-       "published": "2026-06-15"
+       "published": "2026-06-15",
+       "player": "modern"
       }
      ]
     },
@@ -421,14 +696,729 @@
        "title": "Mehmed Fetihler Sultani Episode 84",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-84/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-84-400x232.jpg",
-       "published": "2026-09-22"
+       "published": "2026-09-22",
+       "player": "modern"
       },
       {
        "number": 85,
        "title": "Mehmed Fetihler Sultani Episode 85",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-85/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-85-400x238.jpg",
-       "published": "2026-09-29"
+       "published": "2026-09-29",
+       "player": "modern"
+      },
+      {
+       "number": 86,
+       "title": "Mehmed Fetihler Sultani Episode 86",
+       "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-86/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-86-400x238.jpg",
+       "published": "2026-09-29",
+       "player": "none"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "kurulus-orhan",
+   "title": "Kurulus Orhan",
+   "description": "Watch Kurulus Orhan with English Subtitles for Free. Watch Kurulus Osman Season 7 with English Subtitles",
+   "poster": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-1-400x234.jpg",
+   "fanart": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-1-400x234.jpg",
+   "seasons": [
+    {
+     "number": 1,
+     "episodes": [
+      {
+       "number": 1,
+       "title": "Kurulus Orhan Episode 1",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-1/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-1-400x234.jpg",
+       "published": "2025-11-04",
+       "player": "modern"
+      },
+      {
+       "number": 2,
+       "title": "Kurulus Orhan Episode 2",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-2/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-2-400x234.jpg",
+       "published": "2025-11-11",
+       "player": "modern"
+      },
+      {
+       "number": 3,
+       "title": "Kurulus Orhan Episode 3",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-3/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-3-400x234.jpg",
+       "published": "2025-11-18",
+       "player": "modern"
+      },
+      {
+       "number": 4,
+       "title": "Kurulus Orhan Episode 4",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-4/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-4-400x234.jpg",
+       "published": "2025-11-25",
+       "player": "modern"
+      },
+      {
+       "number": 5,
+       "title": "Kurulus Orhan Episode 5",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-5/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-5-400x234.jpg",
+       "published": "2025-12-02",
+       "player": "modern"
+      },
+      {
+       "number": 6,
+       "title": "Kurulus Orhan Episode 6",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-6/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-6-400x234.jpg",
+       "published": "2025-12-09",
+       "player": "modern"
+      },
+      {
+       "number": 7,
+       "title": "Kurulus Orhan Episode 7",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-7/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-7-400x234.jpg",
+       "published": "2025-12-16",
+       "player": "modern"
+      },
+      {
+       "number": 8,
+       "title": "Kurulus Orhan Episode 8",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-8/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-8-400x234.jpg",
+       "published": "2025-12-23",
+       "player": "modern"
+      },
+      {
+       "number": 9,
+       "title": "Kurulus Orhan Episode 9",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-9/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-9-400x234.jpg",
+       "published": "2025-12-30",
+       "player": "modern"
+      },
+      {
+       "number": 10,
+       "title": "Kurulus Orhan Episode 10",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-10/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-10-400x234.jpg",
+       "published": "2026-01-20",
+       "player": "modern"
+      },
+      {
+       "number": 11,
+       "title": "Kurulus Orhan Episode 11",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-11/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-11-400x234.jpg",
+       "published": "2026-01-27",
+       "player": "modern"
+      },
+      {
+       "number": 12,
+       "title": "Kurulus Orhan Episode 12",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-12/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-12-400x234.jpg",
+       "published": "2026-02-03",
+       "player": "modern"
+      },
+      {
+       "number": 13,
+       "title": "Kurulus Orhan Episode 13",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-13/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-13-400x234.jpg",
+       "published": "2026-02-10",
+       "player": "modern"
+      },
+      {
+       "number": 14,
+       "title": "Kurulus Orhan Episode 14",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-14/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-14-400x234.jpg",
+       "published": "2026-02-17",
+       "player": "modern"
+      },
+      {
+       "number": 15,
+       "title": "Kurulus Orhan Episode 15",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-15/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-15-400x234.jpg",
+       "published": "2026-02-24",
+       "player": "modern"
+      },
+      {
+       "number": 16,
+       "title": "Kurulus Orhan Episode 16",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-16/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-16-400x234.jpg",
+       "published": "2026-03-03",
+       "player": "modern"
+      },
+      {
+       "number": 17,
+       "title": "Kurulus Orhan Episode 17",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-17/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-17-400x234.jpg",
+       "published": "2026-03-17",
+       "player": "modern"
+      },
+      {
+       "number": 18,
+       "title": "Kurulus Orhan Episode 18",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-18/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-18-400x234.jpg",
+       "published": "2026-03-24",
+       "player": "modern"
+      },
+      {
+       "number": 19,
+       "title": "Kurulus Orhan Episode 19",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-19/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-19-400x234.jpg",
+       "published": "2026-03-31",
+       "player": "modern"
+      },
+      {
+       "number": 20,
+       "title": "Kurulus Orhan Episode 20",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-20/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-20-400x234.jpg",
+       "published": "2026-04-07",
+       "player": "modern"
+      },
+      {
+       "number": 21,
+       "title": "Kurulus Orhan Episode 21",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-21/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-21-1-400x234.jpg",
+       "published": "2026-04-14",
+       "player": "modern"
+      },
+      {
+       "number": 22,
+       "title": "Kurulus Orhan Episode 22",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-22/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-22-400x234.jpg",
+       "published": "2026-05-06",
+       "player": "modern"
+      },
+      {
+       "number": 23,
+       "title": "Kurulus Orhan Episode 23",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-23/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-23-400x234.jpg",
+       "published": "2026-05-13",
+       "player": "modern"
+      },
+      {
+       "number": 24,
+       "title": "Kurulus Orhan Episode 24",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-24/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-24-400x234.jpg",
+       "published": "2026-05-29",
+       "player": "modern"
+      },
+      {
+       "number": 25,
+       "title": "Kurulus Orhan Episode 25",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-25/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-25-400x234.jpg",
+       "published": "2026-06-09",
+       "player": "modern"
+      },
+      {
+       "number": 26,
+       "title": "Kurulus Orhan Episode 26",
+       "url": "https://kayifamilytv.com/kurulus-orhan-episode-26/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
+       "published": "2026-06-15",
+       "player": "modern"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salahuddin-ayyubi",
+   "title": "Salahuddin Ayyubi",
+   "description": "Watch Salahaddin Ayyubi with English Subtitles. Saladin with English subtitles for free.",
+   "poster": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-29-English-Subtitles-400x234.jpg",
+   "fanart": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-29-English-Subtitles-400x234.jpg",
+   "seasons": [
+    {
+     "number": 1,
+     "episodes": [
+      {
+       "number": 1,
+       "title": "Salahuddin Ayyubi Episode 1",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-1/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahaddin-Ayyubi-Episode-1-400x240.jpg",
+       "published": "2023-11-13",
+       "player": "legacy"
+      },
+      {
+       "number": 2,
+       "title": "Salahuddin Ayyubi Episode 2",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-2/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahaddin-Ayyubi-Episode-2-400x240.jpg",
+       "published": "2023-11-20",
+       "player": "legacy"
+      },
+      {
+       "number": 3,
+       "title": "Salahuddin Ayyubi Episode 3",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-3/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-3-400x240.jpg",
+       "published": "2023-11-27",
+       "player": "legacy"
+      },
+      {
+       "number": 4,
+       "title": "Salahuddin Ayyubi Episode 4",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-4/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-4-400x240.jpg",
+       "published": "2023-12-04",
+       "player": "legacy"
+      },
+      {
+       "number": 5,
+       "title": "Salahuddin Ayyubi Episode 5",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-5/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-5-400x240.jpg",
+       "published": "2023-12-18",
+       "player": "legacy"
+      },
+      {
+       "number": 6,
+       "title": "Salahuddin Ayyubi Episode 6",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-6/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-6-400x240.jpg",
+       "published": "2023-12-25",
+       "player": "legacy"
+      },
+      {
+       "number": 7,
+       "title": "Salahuddin Ayyubi Episode 7",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-7/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-7-400x240.jpg",
+       "published": "2024-01-01",
+       "player": "legacy"
+      },
+      {
+       "number": 8,
+       "title": "Salahuddin Ayyubi Episode 8",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-8/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-8-400x240.jpg",
+       "published": "2024-01-08",
+       "player": "legacy"
+      },
+      {
+       "number": 9,
+       "title": "Salahuddin Ayyubi Episode 9",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-9/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-9-400x240.jpg",
+       "published": "2024-01-22",
+       "player": "legacy"
+      },
+      {
+       "number": 10,
+       "title": "Salahuddin Ayyubi Episode 10",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-10/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-10-400x240.jpg",
+       "published": "2024-01-29",
+       "player": "legacy"
+      },
+      {
+       "number": 11,
+       "title": "Salahuddin Ayyubi Episode 11",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-11/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-11-400x234.jpg",
+       "published": "2024-02-05",
+       "player": "legacy"
+      },
+      {
+       "number": 12,
+       "title": "Salahuddin Ayyubi Episode 12",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-12/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-12-400x234.jpg",
+       "published": "2024-02-12",
+       "player": "legacy"
+      },
+      {
+       "number": 13,
+       "title": "Salahuddin Ayyubi Episode 13",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-13-english/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-13-400x234.jpg",
+       "published": "2024-02-19",
+       "player": "legacy"
+      },
+      {
+       "number": 14,
+       "title": "Salahuddin Ayyubi Episode 14",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-14/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-14-400x234.jpg",
+       "published": "2024-02-26",
+       "player": "legacy"
+      },
+      {
+       "number": 15,
+       "title": "Salahuddin Ayyubi Episode 15",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-15/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-15-400x234.jpg",
+       "published": "2024-03-04",
+       "player": "legacy"
+      },
+      {
+       "number": 16,
+       "title": "Salahuddin Ayyubi Episode 16",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-16/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-16-400x234.jpg",
+       "published": "2024-03-11",
+       "player": "legacy"
+      },
+      {
+       "number": 17,
+       "title": "Salahuddin Ayyubi Episode 17",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-17/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-17-400x234.jpg",
+       "published": "2024-03-18",
+       "player": "legacy"
+      },
+      {
+       "number": 18,
+       "title": "Salahuddin Ayyubi Episode 18",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-18/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-18-400x234.jpg",
+       "published": "2024-03-26",
+       "player": "legacy"
+      },
+      {
+       "number": 19,
+       "title": "Salahuddin Ayyubi Episode 19",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-19/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-19-400x234.jpg",
+       "published": "2024-04-02",
+       "player": "legacy"
+      },
+      {
+       "number": 20,
+       "title": "Salahuddin Ayyubi Episode 20",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-20/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-20-English-Subtitles-400x234.jpg",
+       "published": "2024-04-15",
+       "player": "legacy"
+      },
+      {
+       "number": 21,
+       "title": "Salahuddin Ayyubi Episode 21",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-21/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-21-400x234.jpg",
+       "published": "2024-04-23",
+       "player": "legacy"
+      },
+      {
+       "number": 22,
+       "title": "Salahuddin Ayyubi Episode 22",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-22/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-22-400x234.jpg",
+       "published": "2024-04-30",
+       "player": "legacy"
+      },
+      {
+       "number": 23,
+       "title": "Salahuddin Ayyubi Episode 23",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-23/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-23-400x234.jpg",
+       "published": "2024-05-06",
+       "player": "legacy"
+      },
+      {
+       "number": 24,
+       "title": "Salahuddin Ayyubi Episode 24",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-24/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-24-400x234.jpg",
+       "published": "2024-05-14",
+       "player": "legacy"
+      },
+      {
+       "number": 25,
+       "title": "Salahuddin Ayyubi Episode 25",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-25/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-25-400x234.jpg",
+       "published": "2024-05-21",
+       "player": "legacy"
+      },
+      {
+       "number": 26,
+       "title": "Salahuddin Ayyubi Episode 26",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-26/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-26-400x234.jpg",
+       "published": "2024-05-28",
+       "player": "legacy"
+      },
+      {
+       "number": 27,
+       "title": "Salahuddin Ayyubi Episode 27",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-27/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-27-400x234.jpg",
+       "published": "2024-06-04",
+       "player": "legacy"
+      },
+      {
+       "number": 28,
+       "title": "Salahuddin Ayyubi Episode 28",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-28/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-28-400x234.jpg",
+       "published": "2024-06-10",
+       "player": "legacy"
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "episodes": [
+      {
+       "number": 29,
+       "title": "Salahuddin Ayyubi Episode 29",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-29/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-29-English-Subtitles-400x234.jpg",
+       "published": "2024-10-22",
+       "player": "legacy"
+      },
+      {
+       "number": 30,
+       "title": "Salahuddin Ayyubi Episode 30",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-30/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-30-400x234.jpg",
+       "published": "2024-10-29",
+       "player": "legacy"
+      },
+      {
+       "number": 31,
+       "title": "Salahuddin Ayyubi Episode 31",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-31/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-31-400x234.jpg",
+       "published": "2024-11-05",
+       "player": "legacy"
+      },
+      {
+       "number": 32,
+       "title": "Salahuddin Ayyubi Episode 32",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-32/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-32-400x234.jpg",
+       "published": "2024-11-12",
+       "player": "legacy"
+      },
+      {
+       "number": 33,
+       "title": "Salahuddin Ayyubi Episode 33",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-33/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-33-400x234.jpg",
+       "published": "2024-11-19",
+       "player": "legacy"
+      },
+      {
+       "number": 34,
+       "title": "Salahuddin Ayyubi Episode 34",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-34/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-34-English-Subtitles-400x234.jpg",
+       "published": "2024-11-26",
+       "player": "legacy"
+      },
+      {
+       "number": 35,
+       "title": "Salahuddin Ayyubi Episode 35",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-35/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-35-400x234.jpg",
+       "published": "2024-12-03",
+       "player": "legacy"
+      },
+      {
+       "number": 36,
+       "title": "Salahuddin Ayyubi Episode 36",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-36/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-36-400x234.jpg",
+       "published": "2024-12-10",
+       "player": "legacy"
+      },
+      {
+       "number": 37,
+       "title": "Salahuddin Ayyubi Episode 37",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-37/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-37-400x234.jpg",
+       "published": "2024-12-17",
+       "player": "legacy"
+      },
+      {
+       "number": 38,
+       "title": "Salahuddin Ayyubi Episode 38",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-38/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-38-400x234.jpg",
+       "published": "2024-12-24",
+       "player": "legacy"
+      },
+      {
+       "number": 39,
+       "title": "Salahuddin Ayyubi Episode 39",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-39/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-39-400x234.jpg",
+       "published": "2024-12-31",
+       "player": "legacy"
+      },
+      {
+       "number": 40,
+       "title": "Salahuddin Ayyubi Episode 40",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-40/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-40-400x234.jpg",
+       "published": "2025-01-14",
+       "player": "legacy"
+      },
+      {
+       "number": 41,
+       "title": "Salahuddin Ayyubi Episode 41",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-41/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-41-400x234.jpg",
+       "published": "2025-01-21",
+       "player": "legacy"
+      },
+      {
+       "number": 42,
+       "title": "Salahuddin Ayyubi Episode 42",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-42/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-42-400x234.jpg",
+       "published": "2025-01-28",
+       "player": "legacy"
+      },
+      {
+       "number": 43,
+       "title": "Salahuddin Ayyubi Episode 43",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-43/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-43-400x234.jpg",
+       "published": "2025-02-04",
+       "player": "legacy"
+      },
+      {
+       "number": 44,
+       "title": "Salahuddin Ayyubi Episode 44",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-44/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-44-400x234.jpg",
+       "published": "2025-02-11",
+       "player": "legacy"
+      },
+      {
+       "number": 45,
+       "title": "Salahuddin Ayyubi Episode 45",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-45/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-45-400x234.jpg",
+       "published": "2025-02-18",
+       "player": "legacy"
+      },
+      {
+       "number": 46,
+       "title": "Salahuddin Ayyubi Episode 46",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-46/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-46-400x234.jpg",
+       "published": "2025-02-25",
+       "player": "legacy"
+      },
+      {
+       "number": 47,
+       "title": "Salahuddin Ayyubi Episode 47",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-47/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-47-400x234.jpg",
+       "published": "2025-03-04",
+       "player": "legacy"
+      },
+      {
+       "number": 48,
+       "title": "Salahuddin Ayyubi Episode 48",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-48/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-48-400x234.jpg",
+       "published": "2025-03-11",
+       "player": "legacy"
+      },
+      {
+       "number": 49,
+       "title": "Salahuddin Ayyubi Episode 49",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-49/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-49-400x234.jpg",
+       "published": "2025-03-18",
+       "player": "legacy"
+      },
+      {
+       "number": 50,
+       "title": "Salahuddin Ayyubi Episode 50",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-50/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-50-400x234.jpg",
+       "published": "2025-03-25",
+       "player": "legacy"
+      },
+      {
+       "number": 51,
+       "title": "Salahuddin Ayyubi Episode 51",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-51/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-51-400x234.jpg",
+       "published": "2025-04-08",
+       "player": "legacy"
+      },
+      {
+       "number": 52,
+       "title": "Salahuddin Ayyubi Episode 52",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-52/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-52-400x234.jpg",
+       "published": "2025-04-15",
+       "player": "legacy"
+      },
+      {
+       "number": 53,
+       "title": "Salahuddin Ayyubi Episode 53",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-53/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-53-400x234.jpg",
+       "published": "2025-04-22",
+       "player": "legacy"
+      },
+      {
+       "number": 54,
+       "title": "Salahuddin Ayyubi Episode 54",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-54/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-54-400x234.jpg",
+       "published": "2025-04-29",
+       "player": "legacy"
+      },
+      {
+       "number": 55,
+       "title": "Salahuddin Ayyubi Episode 55",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-55/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-55-400x234.jpg",
+       "published": "2025-05-06",
+       "player": "legacy"
+      },
+      {
+       "number": 56,
+       "title": "Salahuddin Ayyubi Episode 56",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-56/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-56-400x234.jpg",
+       "published": "2025-05-13",
+       "player": "legacy"
+      },
+      {
+       "number": 57,
+       "title": "Salahuddin Ayyubi Episode 57",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-57/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-57-400x234.jpg",
+       "published": "2025-05-20",
+       "player": "legacy"
+      },
+      {
+       "number": 58,
+       "title": "Salahuddin Ayyubi Episode 58",
+       "url": "https://kayifamilytv.com/salahuddin-ayyubi-episode-58/",
+       "thumb": "https://kayifamilytv.com/wp-content/uploads/Salahuddin-Ayyubi-Episode-58-1-400x234.jpg",
+       "published": "2025-05-27",
+       "player": "legacy"
       }
      ]
     }
@@ -438,11 +1428,23 @@
  "documentaries": [],
  "latest": [
   {
+   "number": 86,
+   "title": "Mehmed Fetihler Sultani Episode 86",
+   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-86/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-86-400x238.jpg",
+   "published": "2026-09-29",
+   "player": "none",
+   "show_id": "mehmed-fetihler-sultani",
+   "show_title": "Mehmed Fetihler Sultani",
+   "season": 4
+  },
+  {
    "number": 85,
    "title": "Mehmed Fetihler Sultani Episode 85",
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-85/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-85-400x238.jpg",
    "published": "2026-09-29",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 4
@@ -453,19 +1455,10 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-84/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-84-400x232.jpg",
    "published": "2026-09-22",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 4
-  },
-  {
-   "number": 26,
-   "title": "Kurulus Orhan Episode 26",
-   "url": "https://kayifamilytv.com/kurulus-orhan-episode-26/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
-   "published": "2026-06-15",
-   "show_id": "kurulus-orhan",
-   "show_title": "Kurulus Orhan",
-   "season": 1
   },
   {
    "number": 83,
@@ -473,6 +1466,40 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-83/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-83-400x234.jpg",
    "published": "2026-06-15",
+   "player": "modern",
+   "show_id": "mehmed-fetihler-sultani",
+   "show_title": "Mehmed Fetihler Sultani",
+   "season": 3
+  },
+  {
+   "number": 26,
+   "title": "Kurulus Orhan Episode 26",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-26/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-26-400x234.jpg",
+   "published": "2026-06-15",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
+  },
+  {
+   "number": 25,
+   "title": "Kurulus Orhan Episode 25",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-25/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-25-400x234.jpg",
+   "published": "2026-06-09",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
+  },
+  {
+   "number": 82,
+   "title": "Mehmed Fetihler Sultani Episode 82",
+   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-82/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-82-400x234.jpg",
+   "published": "2026-06-08",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
@@ -483,9 +1510,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-81/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-81-400x234.jpg",
    "published": "2026-05-29",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 24,
+   "title": "Kurulus Orhan Episode 24",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-24/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-24-400x234.jpg",
+   "published": "2026-05-29",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 80,
@@ -493,9 +1532,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-80/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-80-400x234.jpg",
    "published": "2026-05-19",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 23,
+   "title": "Kurulus Orhan Episode 23",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-23/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-23-400x234.jpg",
+   "published": "2026-05-13",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 79,
@@ -503,9 +1554,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-79/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-79-400x234.jpg",
    "published": "2026-05-12",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 22,
+   "title": "Kurulus Orhan Episode 22",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-22/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-22-400x234.jpg",
+   "published": "2026-05-06",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 78,
@@ -513,6 +1576,7 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-78/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-78-400x234.jpg",
    "published": "2026-05-05",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
@@ -523,6 +1587,7 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-77/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Episode-77-400x234.jpg",
    "published": "2026-04-27",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
@@ -533,6 +1598,7 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-76/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-76-400x234.jpg",
    "published": "2026-04-20",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
@@ -543,9 +1609,32 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-75/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-75-400x234.jpg",
    "published": "2026-04-14",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 21,
+   "title": "Kurulus Orhan Episode 21",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-21/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-21-1-400x234.jpg",
+   "published": "2026-04-14",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
+  },
+  {
+   "number": 20,
+   "title": "Kurulus Orhan Episode 20",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-20/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-20-400x234.jpg",
+   "published": "2026-04-07",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 74,
@@ -553,9 +1642,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-74/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-74-400x234.jpg",
    "published": "2026-04-06",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 19,
+   "title": "Kurulus Orhan Episode 19",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-19/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-19-400x234.jpg",
+   "published": "2026-03-31",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 73,
@@ -563,9 +1664,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-73/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-73-400x234.jpg",
    "published": "2026-03-30",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 18,
+   "title": "Kurulus Orhan Episode 18",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-18/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-18-400x234.jpg",
+   "published": "2026-03-24",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 72,
@@ -573,9 +1686,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-72/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-72-400x234.jpg",
    "published": "2026-03-23",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 17,
+   "title": "Kurulus Orhan Episode 17",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-17/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-17-400x234.jpg",
+   "published": "2026-03-17",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 71,
@@ -583,9 +1708,21 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-71/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-71-400x234.jpg",
    "published": "2026-03-09",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
+  },
+  {
+   "number": 16,
+   "title": "Kurulus Orhan Episode 16",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-16/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-16-400x234.jpg",
+   "published": "2026-03-03",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
    "number": 70,
@@ -593,149 +1730,37 @@
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-70/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-70-400x234.jpg",
    "published": "2026-03-02",
+   "player": "modern",
    "show_id": "mehmed-fetihler-sultani",
    "show_title": "Mehmed Fetihler Sultani",
    "season": 3
   },
   {
-   "number": 69,
-   "title": "Mehmed Fetihler Sultani Episode 69",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-69/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-69-400x234.jpg",
-   "published": "2026-02-16",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
+   "number": 15,
+   "title": "Kurulus Orhan Episode 15",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-15/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-15-400x234.jpg",
+   "published": "2026-02-24",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   },
   {
-   "number": 68,
-   "title": "Mehmed Fetihler Sultani Episode 68",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-68/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-68-400x234.jpg",
-   "published": "2026-02-09",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 67,
-   "title": "Mehmed Fetihler Sultani Episode 67",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-67/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-67-400x234.jpg",
-   "published": "2026-02-02",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 66,
-   "title": "Mehmed Fetihler Sultani Episode 66",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-66/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-66-400x234.jpg",
-   "published": "2026-01-26",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 65,
-   "title": "Mehmed Fetihler Sultani Episode 65",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-65/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-65-400x234.jpg",
-   "published": "2026-01-19",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 64,
-   "title": "Mehmed Fetihler Sultani Episode 64",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-64/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-64-400x234.jpg",
-   "published": "2026-01-12",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 63,
-   "title": "Mehmed Fetihler Sultani Episode 63",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-63/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-63-400x234.jpg",
-   "published": "2026-01-05",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 62,
-   "title": "Mehmed Fetihler Sultani Episode 62",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-62/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-62-400x234.jpg",
-   "published": "2025-12-22",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 61,
-   "title": "Mehmed Fetihler Sultani Episode 61",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-61/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-61-400x234.jpg",
-   "published": "2025-12-15",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 60,
-   "title": "Mehmed Fetihler Sultani Episode 60",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-60/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-60-400x234.jpg",
-   "published": "2025-12-08",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 59,
-   "title": "Mehmed Fetihler Sultani Episode 59",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-59/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-59-400x225.jpg",
-   "published": "2025-11-24",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 58,
-   "title": "Mehmed Fetihler Sultani Episode 58",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-58/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-58-400x234.jpg",
-   "published": "2025-11-18",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 57,
-   "title": "Mehmed Fetihler Sultani Episode 57",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-57/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-57-400x234.jpg",
-   "published": "2025-11-10",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
-  },
-  {
-   "number": 56,
-   "title": "Mehmed Fetihler Sultani Episode 56",
-   "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-56/",
-   "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-56-400x234.jpg",
-   "published": "2025-11-03",
-   "show_id": "mehmed-fetihler-sultani",
-   "show_title": "Mehmed Fetihler Sultani",
-   "season": 3
+   "number": 14,
+   "title": "Kurulus Orhan Episode 14",
+   "url": "https://kayifamilytv.com/kurulus-orhan-episode-14/",
+   "thumb": "https://kayifamilytv.com/wp-content/uploads/Kurulus-Orhan-Episode-14-400x234.jpg",
+   "published": "2026-02-17",
+   "player": "modern",
+   "show_id": "kurulus-orhan",
+   "show_title": "Kurulus Orhan",
+   "season": 1
   }
- ]
+ ],
+ "player_counts": {
+  "legacy": 107,
+  "modern": 62,
+  "none": 1
+ }
 }

@@ -138,8 +138,12 @@ def test_resolve_okru_falls_back_to_best_mp4(monkeypatch):
 
 def test_resolve_episode_contract(monkeypatch):
     monkeypatch.setattr(
-        resolver, "find_player_sources",
-        lambda url: [("okru", "https://ok.ru/videoembed/999")],
+        resolver, "_fetch_episode_post",
+        lambda url: ("<html></html>", url),
+    )
+    monkeypatch.setattr(
+        resolver, "_sources_from_content",
+        lambda content: [("okru", "https://ok.ru/videoembed/999")],
     )
     monkeypatch.setattr(
         resolver, "resolve_player_source",
@@ -155,9 +159,13 @@ def test_resolve_episode_contract(monkeypatch):
 def test_resolve_episode_auto_prefers_okru(monkeypatch):
     calls = []
     monkeypatch.setattr(
-        resolver, "find_player_sources",
-        lambda url: [("moly", "https://vidmoly.org/e.html"),
-                     ("okru", "https://ok.ru/videoembed/999")],
+        resolver, "_fetch_episode_post",
+        lambda url: ("<html></html>", url),
+    )
+    monkeypatch.setattr(
+        resolver, "_sources_from_content",
+        lambda content: [("moly", "https://vidmoly.org/e.html"),
+                         ("okru", "https://ok.ru/videoembed/999")],
     )
 
     def fake_source(label, surl):

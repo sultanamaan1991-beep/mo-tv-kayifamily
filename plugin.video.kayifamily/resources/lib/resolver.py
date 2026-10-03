@@ -126,7 +126,7 @@ _IFRAME_RE = re.compile(
 )
 
 _OKRU_RE = re.compile(r"(?:https?:)?//ok\.ru/videoembed/(\d+)", re.IGNORECASE)
-_MOLY_RE = re.compile(r"https?://vidmoly\.org/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
+_MOLY_RE = re.compile(r"https?://vidmoly\.(?:org|biz|net)/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
 
 # WordPress REST API for canonical post data. Player iframes are taken
 # ONLY from the episode's own post content (content.rendered) -- never
@@ -168,6 +168,19 @@ def _get_post_content(session, episode_url, final_url, html):
     return post.get("content", {}).get("rendered", "")
 
 
+def _fetch_episode_post(episode_url):
+    """Fetch episode page, validate identity via WP API.
+
+    Returns (post_content, final_url). Raises ResolverError on any
+    identity problem -- fail closed, never resolve another episode.
+    """
+    session = _Session()
+    final_url, html = session.get_text(episode_url)
+    log("Episode page loaded: %s (HTTP 200)" % final_url)
+    content = _get_post_content(session, episode_url, final_url, html)
+    return content, final_url
+
+
 def find_player_sources(episode_url):
     """Return [(label, iframe_url), ...] for the episode's OWN player.
 
@@ -176,12 +189,12 @@ def find_player_sources(episode_url):
     for other episodes) are ignored, so Episode N can never resolve to
     Episode M's video.
     """
-    session = _Session()
-    final_url, html = session.get_text(episode_url)
-    log("Episode page loaded: %s (HTTP 200)" % final_url)
+    content, _ = _fetch_episode_post(episode_url)
+    return _sources_from_content(content)
 
-    content = _get_post_content(session, episode_url, final_url, html)
 
+def _sources_from_content(content):
+    """Extract [(label, iframe_url)] modern player sources from post HTML."""
     sources = []
     for match in _IFRAME_RE.finditer(content):
         src = match.group(1).strip()
@@ -295,10 +308,27 @@ _SOURCE_PRIORITY = ("okru", "moly")
 
 
 def resolve_episode(episode_url, preferred_source="auto"):
-    """Resolve a public KayiFamily episode page to a playable stream dict."""
+    """Resolve a public KayiFamily episode page to a playable stream dict.
+
+    Source chain per episode (issue #4):
+      1. modern player (OK.ru / VidMoly) from the episode's OWN post
+      2. legacy player adapter (detected, currently reports unsupported)
+      3. fail clearly -- never substitute another episode's video
+    """
+    # deferred to avoid a circular import (legacy imports ResolverError)
+    from .legacy import detect_legacy_players, resolve_legacy
+
     log("Resolving episode: %s" % episode_url)
-    sources = find_player_sources(episode_url)
+    content, _ = _fetch_episode_post(episode_url)
+    sources = _sources_from_content(content)
     if not sources:
+        # No modern player: check for a legacy player before failing.
+        # Legacy players are detected but not yet resolvable -- the
+        # episode stays visible and fails clearly (issue #4).
+        legacy = detect_legacy_players(content)
+        if legacy:
+            player_type, iframe_url = legacy[0]
+            resolve_legacy(player_type, iframe_url, None)
         raise ResolverError("No video player found on the episode page.")
     debug("Player tabs found: %s" % [label for label, _ in sources])
 
