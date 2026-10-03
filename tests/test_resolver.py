@@ -5,10 +5,12 @@ LIVE test is opt-in via --live.
 """
 
 import sys
+from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, "/home/hatch/workspace/kayifamily-tv/plugin.video.kayifamily")
+PLUGIN_DIR = Path(__file__).resolve().parents[1] / "plugin.video.kayifamily"
+sys.path.insert(0, str(PLUGIN_DIR))
 
 from resources.lib import resolver, subtitles  # noqa: E402
 

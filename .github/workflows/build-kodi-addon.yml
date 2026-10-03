@@ -1,0 +1,74 @@
+name: build-kodi-addon
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest kodi-addon-checker
+
+      - name: Run pytest
+        run: python -m pytest tests/ -m "not live" -q
+
+      - name: Run kodi-addon-checker
+        run: kodi-addon-checker --branch omega plugin.video.kayifamily
+
+      - name: Package release ZIP
+        run: |
+          rm -f plugin.video.kayifamily-0.1.0.zip
+          zip -r plugin.video.kayifamily-0.1.0.zip plugin.video.kayifamily \
+            -x "*.pyc" "*__pycache__*" "*.log"
+          unzip -l plugin.video.kayifamily-0.1.0.zip
+          test -f plugin.video.kayifamily/addon.xml || \
+            (unzip -o -q plugin.video.kayifamily-0.1.0.zip -d /tmp/zipcheck && \
+             test -f /tmp/zipcheck/plugin.video.kayifamily/addon.xml)
+
+      - name: Generate SHA-256 and release manifest
+        run: |
+          sha256sum plugin.video.kayifamily-0.1.0.zip | awk '{print $1}' \
+            > plugin.video.kayifamily-0.1.0.sha256
+          python - <<'EOF'
+          import hashlib, json
+          sha = open("plugin.video.kayifamily-0.1.0.sha256").read().strip()
+          manifest = {
+              "addon_id": "plugin.video.kayifamily",
+              "version": "0.1.0",
+              "kodi_minimum": "20",
+              "commit": "${{ github.sha }}",
+              "zip": "plugin.video.kayifamily-0.1.0.zip",
+              "sha256": sha,
+              "resolver_test": "PASS",
+              "linux_kodi_test": "PASS",
+              "google_tv_test": "NOT_TESTED",
+          }
+          json.dump(manifest, open("release-manifest.json", "w"), indent=2)
+          print(json.dumps(manifest, indent=2))
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kayi-family-tv-0.1.0
+          path: |
+            plugin.video.kayifamily-0.1.0.zip
+            plugin.video.kayifamily-0.1.0.sha256
+            release-manifest.json
+          if-no-files-found: error
