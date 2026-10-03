@@ -70,8 +70,8 @@ def main():
     ok &= check("mehmed seasons", len(seasons) == 4, "%d seasons" % len(seasons))
 
     eps = ls(BASE + "?action=season&" + urllib.parse.urlencode(
-        {"show_id": "payitaht-abdulhamid", "season": "5"}))
-    ok &= check("payitaht S5 episodes", len(eps) > 20, "%d episodes" % len(eps))
+        {"show_id": "kurulus-orhan", "season": "1"}))
+    ok &= check("kurulus-orhan S1 episodes", len(eps) == 26, "%d episodes" % len(eps))
     ep_art = (eps[0].get("art") or {}) if eps else {}
     ok &= check("episode artwork present", bool(ep_art.get("thumb")), list(ep_art.keys()))
 
