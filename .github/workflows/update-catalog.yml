@@ -23,12 +23,12 @@ jobs:
 
       - name: Commit catalog.json only if changed
         run: |
-          if git diff --quiet -- docs/catalog.json; then
+          if git diff --quiet -- docs/catalog.json tools/.playability-cache.json; then
             echo "Catalog unchanged; nothing to commit."
           else
             git config user.name "KayiFamily TV catalog bot"
             git config user.email "catalog@kayifamily.local"
-            git add docs/catalog.json
+            git add docs/catalog.json tools/.playability-cache.json
             git commit -m "Catalog refresh $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git push
           fi

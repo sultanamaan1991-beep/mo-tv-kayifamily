@@ -15,10 +15,12 @@ Exit status / stdout:
 
 import hashlib
 import json
+import os
 import re
 import sys
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 API = "https://kayifamilytv.com/wp-json/wp/v2"
@@ -32,6 +34,19 @@ EXCLUDE_HINTS = ("espanol", "español", "portugues", "português")
 EPISODE_RE = re.compile(r"-episode-(\d+)", re.IGNORECASE)
 SEASON_RE = re.compile(r"season\s*(\d+)", re.IGNORECASE)
 SKIP_TITLE_RE = re.compile(r"trailer|promo|teaser|\bost\b|news|recap", re.IGNORECASE)
+
+# Mirrors resolver.py's player detection exactly: an episode is listed only
+# if its page carries an ok.ru or vidmoly player iframe the frozen resolver
+# can actually play. Legacy-layout pages (wakeupummah/vkvideo/etc.) are
+# skipped; they reappear automatically once the site migrates them.
+_IFRAME_RE = re.compile(r'<iframe[^>]+src="([^"]+)"', re.IGNORECASE)
+_OKRU_RE = re.compile(r"(?:https?:)?//ok\.ru/videoembed/(\d+)", re.IGNORECASE)
+_MOLY_RE = re.compile(r"https?://vidmoly\.org/embed-[A-Za-z0-9]+\.html", re.IGNORECASE)
+CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          ".playability-cache.json")
+PROBE_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/126.0.0.0 Safari/537.36")
 
 UA = {"User-Agent": "KayiFamilyTV-catalog-builder/1.0 (+kodi addon)"}
 
@@ -105,6 +120,71 @@ def fetch_media(media_ids):
     return result
 
 
+def load_playability_cache():
+    try:
+        with open(CACHE_FILE) as f:
+            return json.load(f)
+    except (FileNotFoundError, ValueError):
+        return {}
+
+
+def save_playability_cache(cache):
+    with open(CACHE_FILE, "w") as f:
+        json.dump(cache, f, indent=1)
+        f.write("\n")
+
+
+def _probe_one(args):
+    """Fetch an episode page; True if it has a resolver-playable player,
+    False if legacy layout, None if the fetch itself failed."""
+    post_id, url = args
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": PROBE_UA})
+        html = urllib.request.urlopen(req, timeout=20).read().decode(
+            "utf-8", "ignore")
+        for src in _IFRAME_RE.findall(html):
+            if _OKRU_RE.search(src) or _MOLY_RE.search(src):
+                return post_id, True
+        return post_id, False
+    except Exception:
+        return post_id, None
+
+
+def resolve_playability(posts):
+    """Return {post_id: bool} for playable episodes.
+
+    Incremental: cached verdicts are reused when the post's `modified`
+    date is unchanged; only new/changed posts are probed (parallel).
+    Posts whose probe fails and have no cached verdict are excluded
+    (retried on the next build).
+    """
+    cache = load_playability_cache()
+    verdicts = {}
+    to_probe = []
+    for p in posts:
+        pid = str(p["id"])
+        entry = cache.get(pid)
+        if entry and entry.get("modified") == p.get("modified"):
+            verdicts[p["id"]] = entry["playable"]
+        else:
+            to_probe.append((p["id"], p["link"]))
+    if to_probe:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for pid, result in ex.map(_probe_one, to_probe):
+                post = next(p for p in posts if p["id"] == pid)
+                if result is None:
+                    # fetch failed: keep old verdict if any, else exclude
+                    old = cache.get(str(pid))
+                    if old:
+                        verdicts[pid] = old["playable"]
+                    continue
+                verdicts[pid] = result
+                cache[str(pid)] = {"modified": post.get("modified"),
+                                   "playable": result}
+        save_playability_cache(cache)
+    return verdicts
+
+
 def build():
     categories = api_get_all("/categories", {
         "_fields": "id,name,slug,parent,count,description"})
@@ -127,7 +207,7 @@ def build():
                 continue
             posts = api_get_all("/posts", {
                 "categories": season["id"],
-                "_fields": "id,date,slug,link,title,featured_media",
+                "_fields": "id,date,modified,slug,link,title,featured_media",
             })
             season_posts[season["id"]] = posts
             all_media_ids.extend(p.get("featured_media") for p in posts)
@@ -137,8 +217,9 @@ def build():
             # category (e.g. Destan, Hayreddin). Treat as Season 1.
             posts = api_get_all("/posts", {
                 "categories": show["id"],
-                "_fields": "id,date,slug,link,title,featured_media",
+                "_fields": "id,date,modified,slug,link,title,featured_media",
             })
+            season_posts[show["id"]] = posts
             all_media_ids.extend(p.get("featured_media") for p in posts)
             season_objs.append((1, show, posts))
         shows.append((show, sorted(season_objs)))
@@ -146,11 +227,16 @@ def build():
     # documentaries (flat)
     doc_posts = api_get_all("/posts", {
         "categories": DOCS_CATEGORY,
-        "_fields": "id,date,slug,link,title,featured_media",
+        "_fields": "id,date,modified,slug,link,title,featured_media",
     })
     all_media_ids.extend(p.get("featured_media") for p in doc_posts)
 
     media = fetch_media(all_media_ids)
+
+    all_posts = ([p for posts in season_posts.values() for p in posts]
+                 + doc_posts)
+    playable = resolve_playability(all_posts)
+    n_skipped = sum(1 for p in all_posts if not playable.get(p["id"], False))
 
     def ep_obj(post):
         num = episode_number(post)
@@ -172,6 +258,8 @@ def build():
         for season_no, season, posts in season_objs:
             eps = []
             for p in posts:
+                if not playable.get(p["id"], False):
+                    continue
                 if SKIP_TITLE_RE.search(strip_tags(p.get("title", {}).get("rendered"))):
                     continue
                 e = ep_obj(p)
@@ -205,6 +293,8 @@ def build():
 
     docs = []
     for p in doc_posts:
+        if not playable.get(p["id"], False):
+            continue
         e = ep_obj(p)
         if e["url"]:
             docs.append(e)
@@ -216,12 +306,12 @@ def build():
         "documentaries": docs,
         "latest": latest,
     }
-    return catalog
+    return catalog, n_skipped
 
 
 def main():
     out = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "--out" else OUT
-    catalog = build()
+    catalog, n_skipped = build()
     new_body = {k: v for k, v in catalog.items() if k != "generated"}
     changed = True
     try:
@@ -240,8 +330,8 @@ def main():
     n_shows = len(catalog["shows"])
     n_seasons = sum(len(s["seasons"]) for s in catalog["shows"])
     n_eps = sum(len(se["episodes"]) for s in catalog["shows"] for se in s["seasons"])
-    print("shows=%d seasons=%d episodes=%d documentaries=%d latest=%d -> %s"
-          % (n_shows, n_seasons, n_eps, len(catalog["documentaries"]),
+    print("shows=%d seasons=%d episodes=%d skipped_legacy=%d documentaries=%d latest=%d -> %s"
+          % (n_shows, n_seasons, n_eps, n_skipped, len(catalog["documentaries"]),
              len(catalog["latest"]), "CHANGED" if changed else "UNCHANGED"))
 
 
