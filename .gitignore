@@ -1,0 +1,6 @@
+.tooling/venv/
+.tooling/captures/
+.tooling/references/
+*.pyc
+__pycache__/
+*.log

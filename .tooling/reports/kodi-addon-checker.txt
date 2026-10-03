@@ -1,0 +1,10 @@
+[34mINFO: Checking add-on plugin.video.kayifamily[0m
+[34mINFO: Created by KayiFamily TV PoC[0m
+[34mINFO: Addon id matches folder name[0m
+[34mINFO: This is a new addon[0m
+[34mINFO: Valid XML file found[0m
+[35mWARN: For omega it is advised to set xbmc.python version to 3.0.1[0m
+[34mINFO: You might want to add a icon[0m
+[34mINFO: You might want to add a fanart[0m
+[35mWARN: Complex entry point. Check: main.py | Counted lines: 92 | Lines allowed: 15[0m
+[35mWARN: We found no problems and 2 warnings, please check the logfile.[0m

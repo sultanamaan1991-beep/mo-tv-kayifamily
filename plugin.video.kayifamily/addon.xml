@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.kayifamily"
+       version="0.1.0"
+       name="KayiFamily TV"
+       provider-name="KayiFamily TV PoC">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="inputstream.adaptive" version="21.4.6" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Browse and play English-subtitled Turkish series from KayiFamily (proof of concept)</summary>
+        <description lang="en_GB">Minimal proof-of-concept add-on: resolves one KayiFamily episode to a playable stream and hands it to Kodi's native player. No catalogs, no accounts.</description>
+        <platform>all</platform>
+        <license>MIT</license>
+    </extension>
+</addon>
