@@ -1,13 +1,19 @@
-"""KayiFamily TV - minimal proof-of-concept Kodi video add-on.
+"""KayiFamily TV - Kodi video add-on.
 
 Navigation:
     KayiFamily TV
-        └── Test Series
-              └── Test Episode
-                    └── Play
+        ├── Latest Episodes
+        ├── All Shows
+        │     └── Show
+        │           └── Season
+        │                 └── Episode -> Play
+        ├── Search
+        └── Documentaries
 
-Play resolves the episode live (no hard-coded stream URLs) and hands the
-result to Kodi's native player via xbmcplugin.setResolvedUrl.
+The episode catalog is a single JSON file built outside Kodi
+(tools/build_catalog.py) and cached locally -- browsing never crawls
+the website and never resolves video streams. Play calls the frozen
+resolver.py flow exactly as the proven Episode 85 implementation does.
 """
 
 import sys
@@ -21,57 +27,184 @@ import xbmcplugin
 from resources.lib.logger import log, debug
 from resources.lib.resolver import resolve_episode, ResolverError
 from resources.lib import subtitles as subtitles_lib
+from resources.lib import catalog as catalog_lib
 
 ADDON = xbmcaddon.Addon()
 HANDLE = int(sys.argv[1])
 BASE_URL = sys.argv[0]
-
-# The single proof-of-concept episode. Only the *page* URL is fixed here;
-# the actual video stream URL is resolved fresh on every Play.
-TEST_SERIES_NAME = "Mehmed Fetihler Sultani (Test)"
-TEST_EPISODE = {
-    "title": "Episode 85 (Test)",
-    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-85/",
-}
 
 
 def _url(**params):
     return "%s?%s" % (BASE_URL, urllib.parse.urlencode(params))
 
 
-def _add_dir(label, params, is_folder=True):
+def _add_dir(label, params, art=None, info=None, is_folder=True):
     item = xbmcgui.ListItem(label=label)
+    if art:
+        item.setArt({k: v for k, v in art.items() if v})
+    if info:
+        item.setInfo("video", info)
     xbmcplugin.addDirectoryItem(HANDLE, _url(**params), item, is_folder)
+
+
+def _playable_episode(label, episode_url, art=None, info=None):
+    """A single playable episode entry (IsPlayable -> action=play)."""
+    item = xbmcgui.ListItem(label=label, offscreen=True)
+    item.setProperty("IsPlayable", "true")
+    if art:
+        item.setArt({k: v for k, v in art.items() if v})
+    info = dict(info or {})
+    info.setdefault("mediatype", "episode")
+    item.setInfo("video", info)
+    xbmcplugin.addDirectoryItem(
+        HANDLE,
+        _url(action="play", url=episode_url, title=label),
+        item,
+        False,
+    )
+
+
+def _show_art(show):
+    return {"poster": show.get("poster"), "fanart": show.get("fanart")}
+
+
+def _episode_label(show_title, season_no, ep):
+    return "%s - S%dE%d: %s" % (
+        show_title, season_no, ep.get("number"), ep.get("title"))
+
+
+def _episode_info(show, season_no, ep):
+    return {
+        "title": ep.get("title"),
+        "tvshowtitle": show.get("title"),
+        "season": season_no,
+        "episode": ep.get("number"),
+        "plot": show.get("description"),
+        "date": ep.get("published"),
+        "mediatype": "episode",
+    }
+
+
+def _episode_art(show, ep):
+    return {
+        "thumb": ep.get("thumb"),
+        "poster": show.get("poster"),
+        "fanart": show.get("fanart"),
+    }
 
 
 def list_root():
     xbmcplugin.setPluginCategory(HANDLE, "KayiFamily TV")
     xbmcplugin.setContent(HANDLE, "tvshows")
-    _add_dir(TEST_SERIES_NAME, {"action": "series"})
+    _add_dir("Latest Episodes", {"action": "latest"})
+    _add_dir("All Shows", {"action": "shows"})
+    _add_dir("Search", {"action": "search"})
+    _add_dir("Documentaries", {"action": "docs"})
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def list_series():
-    xbmcplugin.setPluginCategory(HANDLE, TEST_SERIES_NAME)
+def list_latest(catalog):
+    xbmcplugin.setPluginCategory(HANDLE, "Latest Episodes")
     xbmcplugin.setContent(HANDLE, "episodes")
-    _add_dir(TEST_EPISODE["title"], {
-        "action": "episode",
-        "url": TEST_EPISODE["url"],
-        "title": TEST_EPISODE["title"],
-    })
+    for entry in catalog_lib.get_latest(catalog):
+        show = catalog_lib.get_show(catalog, entry.get("show_id")) or {}
+        label = "%s: %s" % (entry.get("show_title"), entry.get("title"))
+        info = _episode_info(show, entry.get("season"), entry)
+        info["title"] = label
+        _playable_episode(label, entry.get("url"),
+                          art=_episode_art(show, entry), info=info)
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def list_episode(episode_url, title):
-    item = xbmcgui.ListItem(label=title)
-    item.setProperty("IsPlayable", "true")
-    item.setInfo("video", {"title": title, "mediatype": "episode"})
-    xbmcplugin.addDirectoryItem(
-        HANDLE,
-        _url(action="play", url=episode_url, title=title),
-        item,
-        False,
-    )
+def list_shows(catalog):
+    xbmcplugin.setPluginCategory(HANDLE, "All Shows")
+    xbmcplugin.setContent(HANDLE, "tvshows")
+    for show in catalog_lib.get_shows(catalog):
+        n_eps = sum(len(s.get("episodes", [])) for s in show.get("seasons", []))
+        label = "%s (%d episodes)" % (show.get("title"), n_eps)
+        _add_dir(label, {"action": "show", "show_id": show.get("id")},
+                 art=_show_art(show),
+                 info={"title": show.get("title"), "plot": show.get("description"),
+                       "mediatype": "tvshow"})
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
+def list_seasons(catalog, show_id):
+    show = catalog_lib.get_show(catalog, show_id)
+    if not show:
+        xbmcplugin.endOfDirectory(HANDLE)
+        return
+    xbmcplugin.setPluginCategory(HANDLE, show.get("title"))
+    xbmcplugin.setContent(HANDLE, "seasons")
+    for season in show.get("seasons", []):
+        label = "Season %d (%d episodes)" % (
+            season.get("number"), len(season.get("episodes", [])))
+        _add_dir(label,
+                 {"action": "season", "show_id": show_id,
+                  "season": season.get("number")},
+                 art=_show_art(show),
+                 info={"title": label, "tvshowtitle": show.get("title"),
+                       "season": season.get("number"),
+                       "plot": show.get("description"),
+                       "mediatype": "season"})
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
+def list_episodes(catalog, show_id, season_no):
+    show = catalog_lib.get_show(catalog, show_id)
+    season = catalog_lib.get_season(show or {}, season_no)
+    if not season:
+        xbmcplugin.endOfDirectory(HANDLE)
+        return
+    xbmcplugin.setPluginCategory(
+        HANDLE, "%s - Season %d" % (show.get("title"), season_no))
+    xbmcplugin.setContent(HANDLE, "episodes")
+    for ep in season.get("episodes", []):
+        label = "Episode %d" % ep.get("number")
+        _playable_episode(label, ep.get("url"),
+                          art=_episode_art(show, ep),
+                          info=_episode_info(show, season_no, ep))
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
+def list_docs(catalog):
+    xbmcplugin.setPluginCategory(HANDLE, "Documentaries")
+    xbmcplugin.setContent(HANDLE, "episodes")
+    docs = catalog_lib.get_documentaries(catalog)
+    for ep in docs:
+        _playable_episode(ep.get("title"), ep.get("url"),
+                          art={"thumb": ep.get("thumb")},
+                          info={"title": ep.get("title"),
+                                "date": ep.get("published"),
+                                "mediatype": "episode"})
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
+def do_search(catalog):
+    kb = xbmc.Keyboard("", "Search KayiFamily TV")
+    kb.doModal()
+    if not kb.isConfirmed():
+        return
+    query = kb.getText().strip()
+    if not query:
+        return
+    xbmcplugin.setPluginCategory(HANDLE, "Search: %s" % query)
+    xbmcplugin.setContent(HANDLE, "episodes")
+    for hit in catalog_lib.search(catalog, query):
+        show = hit["show"]
+        if hit["type"] == "show":
+            _add_dir(show.get("title"),
+                     {"action": "show", "show_id": show.get("id")},
+                     art=_show_art(show),
+                     info={"title": show.get("title"),
+                           "plot": show.get("description"),
+                           "mediatype": "tvshow"})
+        else:
+            ep = hit["episode"]
+            label = _episode_label(show.get("title"), hit["season"], ep)
+            _playable_episode(label, ep.get("url"),
+                              art=_episode_art(show, ep),
+                              info=_episode_info(show, hit["season"], ep))
     xbmcplugin.endOfDirectory(HANDLE)
 
 
@@ -135,13 +268,26 @@ def play(episode_url, title):
 def router():
     params = dict(urllib.parse.parse_qsl(sys.argv[2][1:]))
     action = params.get("action")
-    debug("Router action=%s params=%s" % (action, params))
-    if action == "series":
-        list_series()
-    elif action == "episode":
-        list_episode(params["url"], params.get("title", "Episode"))
-    elif action == "play":
+    debug("Router action=%s" % action)
+    if action == "play":
         play(params["url"], params.get("title", "Episode"))
+        return
+    catalog, from_cache = catalog_lib.load_catalog()
+    debug("Catalog loaded (%d shows, from_cache=%s)"
+          % (len(catalog_lib.get_shows(catalog)), from_cache))
+    if action == "latest":
+        list_latest(catalog)
+    elif action == "shows":
+        list_shows(catalog)
+    elif action == "show":
+        list_seasons(catalog, params.get("show_id"))
+    elif action == "season":
+        list_episodes(catalog, params.get("show_id"),
+                      int(params.get("season", 0)))
+    elif action == "docs":
+        list_docs(catalog)
+    elif action == "search":
+        do_search(catalog)
     else:
         list_root()
 
