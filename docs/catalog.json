@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-03T20:23:42+00:00",
+ "generated": "2026-10-06T12:28:58+00:00",
  "source": "https://kayifamilytv.com/wp-json/wp/v2",
  "shows": [
   {
@@ -882,8 +882,8 @@
        "title": "Mehmed Fetihler Sultani Episode 86",
        "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-86/",
        "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-86-400x238.jpg",
-       "published": "2026-09-29",
-       "player": "none",
+       "published": "2026-10-06",
+       "player": "modern",
        "youtube_video_id": "Tr_6AY4-da4",
        "subtitle_file": "mehmed/s04e86.en.srt"
       }
@@ -1772,8 +1772,8 @@
    "title": "Mehmed Fetihler Sultani Episode 86",
    "url": "https://kayifamilytv.com/mehmed-fetihler-sultani-episode-86/",
    "thumb": "https://kayifamilytv.com/wp-content/uploads/Mehmed-Fetihler-Sultani-Episode-86-400x238.jpg",
-   "published": "2026-09-29",
-   "player": "none",
+   "published": "2026-10-06",
+   "player": "modern",
    "youtube_video_id": "Tr_6AY4-da4",
    "subtitle_file": "mehmed/s04e86.en.srt",
    "show_id": "mehmed-fetihler-sultani",
@@ -2160,7 +2160,6 @@
  ],
  "player_counts": {
   "legacy": 107,
-  "modern": 62,
-  "none": 1
+  "modern": 63
  }
 }
